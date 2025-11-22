@@ -1,2 +1,5 @@
-data/Annotations/*
-data/Raw/*
+
+data/Raw/train/images/*
+data/Raw/train/labels/*
+data/Raw/validate/images/*
+data/Raw/validate/labels/*
