@@ -1,6 +1,9 @@
-train: ../train/images
-val: ../valid/images
-test: ../test/images
+## FOR OTHERS: UPDATE PATH IF YOU USE
+
+path: data/Raw
+
+train: train/images
+val: validate/images
 
 nc: 1
 names: ['License-Plate']
