@@ -8,7 +8,9 @@
 .
 ├── data
 │   ├── Annotations
-│   ├── Preprocessed
+│   ├── inference
+│   │   ├── preprocessed
+│   │   └── raw
 │   └── Raw
 │       ├── train
 │       │   ├── images
@@ -22,6 +24,7 @@
 ├── Notes
 ├── src
 │   ├── preprocessing
+│   │   └── __pycache__
 │   └── training
 ├── tests
 └── ui
@@ -31,6 +34,11 @@
 + Notes: notes
 + src: python scripts for everything
 + ui: interface stuff
+
++ data storing notation:
+    + currently stores everything in two folders:
+        + inference/ - for the data inputted by user for its preprocessed derivatives
+        + Raw/ - for storing training data
 
 ## Collaborators
 
