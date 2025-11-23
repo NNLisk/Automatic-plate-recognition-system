@@ -39,6 +39,8 @@ def getCroppedPlate(filename):
         raise Exception("no plates detected")
         return None
 
+    # below: returns the box coordinates for the plat with the highest confidence
+    # then crops the normalized plate with the box coordinates
     box = result.boxes[0]
     x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
     plate_crop = normalized_for_cropping[y1:y2, x1:x2]
