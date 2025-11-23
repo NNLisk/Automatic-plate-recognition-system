@@ -10,3 +10,9 @@
 + data splitting and training related
     + There are 362 images, with one image having multiple variants with different noise
     
+
+## resources
+
++ For image INFERENCE STEP preprocessing:
+    + https://www.geeksforgeeks.org/deep-learning/introduction-to-object-detection-using-image-processing/#key-steps-in-image-preprocessing
+
