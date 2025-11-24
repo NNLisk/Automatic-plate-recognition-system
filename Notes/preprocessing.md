@@ -4,15 +4,17 @@
 + overview
     + I trained YOLO to detect plates
     + added preprocessing step to save box coordinates and final preprocessed (cropped) image
-    + these images can be used for OCR
+    + after thresholding --> OCR
 
-+ Image operations and augmentation related
++ Image operations and augmentation related (PLATE RECOGNITION)
     + Images are grayscaled
     + 5% salt and pepper noise is added
     + this makes the plate finding model more robust; YOLO is optimized for real world dirty lenses, messy images and other imperfections
     + no unified sizing needed for the plate finder since yolo can normalize images to its standard input size 640x640
-+ data splitting and training related
+
++ data splitting and training related (PLATE RECOGNITION)
     + There are 362 images, with one image having multiple variants with different noise
+
 + pipeline related
     + CURRENTLY: src/preprocessing/preprocessing.py
         + takes in a filepath of a stored image in data/inference/raw
@@ -24,7 +26,7 @@
             + temporary cropped plates
             + segmented characters
             + text file with the resulting plate info
-    
+
 
 ## resources
 
@@ -34,4 +36,6 @@
     + Image box coordinates in the preprocessing step
         + https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Boxes
         + https://docs.ultralytics.com/modes/predict/#boxes
-
+    + Thresholding
+        + https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+    

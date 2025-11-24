@@ -14,7 +14,7 @@
         + logarithmic decrease is good, MLA learns fast
         + confusion matrix: 98% of plates detected, 2% false negatives
         + YOLO doesnt mispredict or isnt overfit
-        + YOLO IS GOOD TO DETECT PLATES FROM IMAGES
+        + YOLOv8 IS GOOD TO DETECT PLATES FROM IMAGES
 
 + References
     + https://docs.ultralytics.com/modes/train/#idle-gpu-training
