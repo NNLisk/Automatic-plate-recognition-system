@@ -9,10 +9,8 @@ model = YOLO("models/plate_detector/weights/best.pt")
 
 def preprocessForPlateFinding(filename):
     img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-
     if img is None:
         raise Exception("No image")
-
     normalized = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
     blurred = cv2.GaussianBlur(normalized, (5,5), 0)
 
@@ -29,7 +27,7 @@ def getCroppedPlate(filename, sessionPath):
     
     normalized_for_cropping = cv2.normalize(for_cropping, None, 0, 255, cv2.NORM_MINMAX)
     
-    temporary_path = f"{sessionPath}/temp.jpg"
+    temporary_path = f"{sessionPath}/for_plate_detection.jpg"
     cv2.imwrite(temporary_path, for_plate_detection)
 
     results = model(temporary_path, conf=0.5)
@@ -45,10 +43,25 @@ def getCroppedPlate(filename, sessionPath):
     x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
     plate_crop = normalized_for_cropping[y1:y2, x1:x2]
 
+    cv2.imwrite(f"{sessionPath}/cropped.jpg", plate_crop)
+
     return plate_crop
 
 
+def processCropped(filename, sessionPath):
+    cropped = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
+    _, thresheld = cv2.threshold(cropped, 127, 255, cv2.THRESH_BINARY_INV)
+    # adaptive_thresholded_mean = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
+    # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+
+    cv2.imwrite(f"{sessionPath}/thresholded.jpg", thresheld)
+    # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_mean.jpg", adaptive_thresholded_mean)
+    # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_gaus.jpg", adaptive_thresholded_gaus)
+
+    
+
+    return thresheld
 # for just local tests
 # if __name__ == "__main__":
 #    os.chdir("/home/niko/Programming/school/AI/project")

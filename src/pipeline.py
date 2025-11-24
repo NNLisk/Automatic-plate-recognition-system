@@ -7,7 +7,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
-from src.preprocessing.preprocessing import getCroppedPlate
+from src.preprocessing.preprocessing import getCroppedPlate, processCropped
 from src.utils.filer import makeNewSession
 
 
@@ -24,8 +24,8 @@ def processImage(filename):
     cv2.imwrite(f"{sessionPath}/rawinput.jpg", img)
 
     cropped = getCroppedPlate(f"{sessionPath}/rawinput.jpg", sessionPath)
+    thresheld = processCropped(f"{sessionPath}/cropped.jpg", sessionPath)
     
-    cv2.imwrite(f"{sessionPath}/cropped.jpg", cropped)
 
 
 

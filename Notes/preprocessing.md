@@ -18,8 +18,8 @@
         + takes in a filepath of a stored image in data/inference/raw
         + saves a temporary file in data/inference/preprocessing, used for plate detection
         + saves a final preprocessed and cropped plate to the same folder
-        + TEMPORARY SETTING, we will need user specific folders eventually
-        + folder needs to contain
+        + TEMPORARY SETTING, we will need user specific folders eventually (SOLVED)
+        + folder contains
             + input image
             + temporary cropped plates
             + segmented characters
