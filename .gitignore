@@ -1,5 +1,2 @@
-
-data/Raw/train/images/*
-data/Raw/train/labels/*
-data/Raw/validate/images/*
-data/Raw/validate/labels/*
+data/plate_detector_training_data/train/*
+data/plate_detector_training_data/validate/*
