@@ -9,4 +9,12 @@
     + can take an image, and return a cropped plate to a specified save file
     + see src/preprocessing/preprocessing.py and tests/test_detection.py
 + wrote testfiles
-+ fixed some 
++ changed data folder structure: will be changed more later
+
+## Niko - 24.11
++ made the pipeline work from raw image to cropped + temp files in one master function: src/pipeline.py
++ filing session system
+    + whenever a new raw input image is processed, it creates a folder with a unique id: 001, 002 etc that contains picture specific stuff
++ test results separated to tests/temp
+
+

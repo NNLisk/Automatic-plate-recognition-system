@@ -3,7 +3,8 @@ import os
 from ultralytics import YOLO
 import sys
 
-project_root = "/home/niko/Programming/school/AI/project"
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(project_root)
 sys.path.insert(0, project_root)
 
 from src.preprocessing.preprocessing import preprocessForPlateFinding
@@ -17,7 +18,7 @@ def testPlateDetection(imgpath):
     preprocessed = preprocessForPlateFinding(imgpath)
 
     # writes temporarily to preprocessed data
-    temporary_path = "data/inference/preprocessed/temp.jpg"
+    temporary_path = "tests/temp/temp.jpg"
     cv2.imwrite(temporary_path, preprocessed)
 
     results = model(temporary_path, conf=0.5)
@@ -40,7 +41,6 @@ def testPlateDetection(imgpath):
 
 if __name__ == "__main__":
     # This just runs the plate detection model for testing
-    os.chdir("/home/niko/Programming/school/AI/project")
     testfile = "data/inference/raw/test1.jpg"
     plate = testPlateDetection(testfile)
 
@@ -48,5 +48,5 @@ if __name__ == "__main__":
     # DELETE AFTER TESTING
 
     if plate is not None:
-        cv2.imwrite("data/inference/preprocessed/detected_plate.jpg", plate)
+        cv2.imwrite("tests/temp/detected_plate.jpg", plate)
         print("Saved cropped plate to data/Preprocessed/")

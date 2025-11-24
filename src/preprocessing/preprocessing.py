@@ -20,7 +20,7 @@ def preprocessForPlateFinding(filename):
 
 
 
-def getCroppedPlate(filename):
+def getCroppedPlate(filename, sessionPath):
     for_cropping = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     for_plate_detection = preprocessForPlateFinding(filename)
 
@@ -29,7 +29,7 @@ def getCroppedPlate(filename):
     
     normalized_for_cropping = cv2.normalize(for_cropping, None, 0, 255, cv2.NORM_MINMAX)
     
-    temporary_path = "data/inference/preprocessed/temp.jpg"
+    temporary_path = f"{sessionPath}/temp.jpg"
     cv2.imwrite(temporary_path, for_plate_detection)
 
     results = model(temporary_path, conf=0.5)
