@@ -9,9 +9,12 @@
 ├── data
 │   ├── Annotations
 │   ├── inference
-│   │   ├── preprocessed
-│   │   └── raw
-│   └── Raw
+│   │   ├── raw
+│   │   └── sessions
+│   │       ├── 1
+│   │       ├── 2
+│   │       └── 3
+│   └── plate_detector_training_data
 │       ├── train
 │       │   ├── images
 │       │   └── labels
@@ -22,11 +25,15 @@
 │   └── plate_detector
 │       └── weights
 ├── Notes
+│   └── different_thresholds
 ├── src
 │   ├── preprocessing
 │   │   └── __pycache__
-│   └── training
+│   ├── training
+│   └── utils
+│       └── __pycache__
 ├── tests
+│   └── temp
 └── ui
 ```
 + data is for storing pictures before and after processing
