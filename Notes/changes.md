@@ -17,5 +17,6 @@
     + whenever a new raw input image is processed, it creates a folder with a unique id: 001, 002 etc that contains picture specific stuff
 + test results separated to tests/temp
 + tried different thresholds for plates -> regular 127 seems to be the best without technical tests
++ Found the good morphology for the image segmentation
 
 

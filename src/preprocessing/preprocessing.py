@@ -51,13 +51,15 @@ def get_cropped_plate(filename, sessionPath):
 def process_cropped(filename, sessionPath):
     cropped = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-    _, thresheld = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    _, thresheld = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, blockSize=11, C=2
+#)   
     # _, thresheld2 = cv2.threshold(cropped, 75, 255, cv2.THRESH_BINARY)
     # _, thresheld3 = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # adaptive_thresholded_mean = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
     # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 
-    cv2.imwrite(f"{sessionPath}/thresholded50.jpg", thresheld)
+    cv2.imwrite(f"{sessionPath}/thresholded.jpg", thresheld)
     # cv2.imwrite(f"{sessionPath}/thresholded75.jpg", thresheld2)
     # cv2.imwrite(f"{sessionPath}/thresholded0otsu.jpg", thresheld3)
     # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_mean.jpg", adaptive_thresholded_mean)
@@ -67,7 +69,34 @@ def process_cropped(filename, sessionPath):
 
 
 def thresholded_2_segmented_letters(filename, sessionPath):
-    pass
+    thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    kernel = np.ones((2,2), np.uint8)
+    cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
+    # cleaned = cv2.dilate(cleaned, kernel,  iterations=2)
+
+    #cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
+    cv2.imshow("t", cleaned)
+    cv2.waitKey(0)
+
+    contours, hierarchy = cv2.findContours(cleaned, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    character_contours = []
+
+    for c in contours:
+        x, y, w, h = cv2.boundingRect(c)
+        plate_h, plate_w = cleaned.shape
+        area = w*h / (plate_w * plate_h)
+        aspectRatio = h / float(w)
+        if area < 0.01 or area > 0.5:
+            continue
+        if aspectRatio < 0.5 or aspectRatio > 5:
+            continue
+        if h / plate_h < 0.4:
+            continue
+        character_contours.append((x,y,w,h))
+    return character_contours
+
+
 
 # for just local tests
 # if __name__ == "__main__":

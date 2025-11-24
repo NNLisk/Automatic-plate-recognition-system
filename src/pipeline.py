@@ -26,7 +26,7 @@ def processImage(filename):
     cropped = get_cropped_plate(f"{sessionPath}/rawinput.jpg", sessionPath)
     thresheld = process_cropped(f"{sessionPath}/cropped.jpg", sessionPath)
     
-
+    thresholded_2_segmented_letters(f"{sessionPath}/thresholded.jpg", sessionPath)
 
 
 if __name__ == "__main__":
