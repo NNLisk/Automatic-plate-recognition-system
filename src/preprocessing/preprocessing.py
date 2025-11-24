@@ -51,7 +51,7 @@ def getCroppedPlate(filename, sessionPath):
 def processCropped(filename, sessionPath):
     cropped = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-    _, thresheld = cv2.threshold(cropped, 127, 255, cv2.THRESH_BINARY_INV)
+    _, thresheld = cv2.threshold(cropped, 127, 255, cv2.THRESH_BINARY)
     # adaptive_thresholded_mean = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
     # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 

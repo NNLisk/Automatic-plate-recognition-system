@@ -28,3 +28,10 @@
 + logistic and softmax regression
 + VGG, ResNet, mobileNet
 + PCA, HOG
+
++ references
+    + https://docs.opencv.org/4.x/d9/d1e/tutorial_dnn_OCR.html
+    + https://pyimagesearch.com/2021/11/15/tesseract-page-segmentation-modes-psms-explained-how-to-improve-your-ocr-accuracy/
+    + https://www.geeksforgeeks.org/machine-learning/license-plate-recognition-with-opencv-and-tesseract-ocr/   
+    + https://docs.pytorch.org/vision/main/models/vgg.html
+    + 
