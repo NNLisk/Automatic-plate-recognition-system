@@ -11,6 +11,7 @@
     + 5% salt and pepper noise is added
     + this makes the plate finding model more robust; YOLO is optimized for real world dirty lenses, messy images and other imperfections
     + no unified sizing needed for the plate finder since yolo can normalize images to its standard input size 640x640
+    + THRESHOLDING SOLVED; moved from fixed thresholding to fixed + OTSU
 
 + data splitting and training related (PLATE RECOGNITION)
     + There are 362 images, with one image having multiple variants with different noise
@@ -26,6 +27,7 @@
             + temporary cropped plates
             + segmented characters
             + text file with the resulting plate info
+        
 
 
 ## resources

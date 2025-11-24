@@ -7,7 +7,7 @@ model = YOLO("models/plate_detector/weights/best.pt")
 
 # preprocessing method ran on each picture coming from the UI
 
-def preprocessForPlateFinding(filename):
+def preprocess_for_plate_finding(filename):
     img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise Exception("No image")
@@ -18,9 +18,9 @@ def preprocessForPlateFinding(filename):
 
 
 
-def getCroppedPlate(filename, sessionPath):
+def get_cropped_plate(filename, sessionPath):
     for_cropping = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-    for_plate_detection = preprocessForPlateFinding(filename)
+    for_plate_detection = preprocess_for_plate_finding(filename)
 
     if for_cropping is None or for_plate_detection is None:
         raise Exception("No image")
@@ -48,20 +48,27 @@ def getCroppedPlate(filename, sessionPath):
     return plate_crop
 
 
-def processCropped(filename, sessionPath):
+def process_cropped(filename, sessionPath):
     cropped = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-    _, thresheld = cv2.threshold(cropped, 127, 255, cv2.THRESH_BINARY)
+    _, thresheld = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # _, thresheld2 = cv2.threshold(cropped, 75, 255, cv2.THRESH_BINARY)
+    # _, thresheld3 = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # adaptive_thresholded_mean = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
     # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 
-    cv2.imwrite(f"{sessionPath}/thresholded.jpg", thresheld)
+    cv2.imwrite(f"{sessionPath}/thresholded50.jpg", thresheld)
+    # cv2.imwrite(f"{sessionPath}/thresholded75.jpg", thresheld2)
+    # cv2.imwrite(f"{sessionPath}/thresholded0otsu.jpg", thresheld3)
     # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_mean.jpg", adaptive_thresholded_mean)
     # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_gaus.jpg", adaptive_thresholded_gaus)
 
-    
-
     return thresheld
+
+
+def thresholded_2_segmented_letters(filename, sessionPath):
+    pass
+
 # for just local tests
 # if __name__ == "__main__":
 #    os.chdir("/home/niko/Programming/school/AI/project")
