@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 from ultralytics import YOLO
+from imutils import contours
 
 model = YOLO("models/plate_detector/weights/best.pt")
 
@@ -51,7 +52,7 @@ def get_cropped_plate(filename, sessionPath):
 def process_cropped(filename, sessionPath):
     cropped = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-    _, thresheld = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    thresheld = cv2.threshold(cropped, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
     # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, blockSize=11, C=2
 #)   
     # _, thresheld2 = cv2.threshold(cropped, 75, 255, cv2.THRESH_BINARY)
@@ -70,33 +71,45 @@ def process_cropped(filename, sessionPath):
 
 def thresholded_2_segmented_letters(filename, sessionPath):
     thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    plate_h, plate_w = thimg.shape
     kernel = np.ones((2,2), np.uint8)
     cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
-    # cleaned = cv2.dilate(cleaned, kernel,  iterations=2)
-
-    #cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
+    # eroded = cv2.erode(cleaned, kernel)
+    # cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
     cv2.imshow("t", cleaned)
     cv2.waitKey(0)
 
-    contours, hierarchy = cv2.findContours(cleaned, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cv2.findContours(cleaned, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
+    if not cnts:
+        print("No contours found")
+        return []
+    
     character_contours = []
 
-    for c in contours:
+    (cnts, _) = contours.sort_contours(cnts, method="left-to-right")
+    for c in cnts:
+        area = cv2.contourArea(c)
         x, y, w, h = cv2.boundingRect(c)
-        plate_h, plate_w = cleaned.shape
-        area = w*h / (plate_w * plate_h)
-        aspectRatio = h / float(w)
-        if area < 0.01 or area > 0.5:
+
+        rel_h = h / plate_h
+        rel_w = w / plate_w
+        rel_area = (w * h) / (plate_w * plate_h)
+        aspect = h / float(w)
+
+        
+        if not (0.4 <= rel_h <= 0.9):
             continue
-        if aspectRatio < 0.5 or aspectRatio > 5:
+
+        if not (0.01 <= rel_area <= 0.2):
             continue
-        if h / plate_h < 0.4:
+
+        if not (1.3 <= aspect <= 7.0):
             continue
+
         character_contours.append((x,y,w,h))
     return character_contours
-
-
 
 # for just local tests
 # if __name__ == "__main__":

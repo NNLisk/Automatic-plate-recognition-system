@@ -12,6 +12,14 @@
     + this makes the plate finding model more robust; YOLO is optimized for real world dirty lenses, messy images and other imperfections
     + no unified sizing needed for the plate finder since yolo can normalize images to its standard input size 640x640
     + THRESHOLDING SOLVED; moved from fixed thresholding to fixed + OTSU
++ MORPHOLOGY
+    + Thresholded with Binary inv + otsu
+    + took soft contours
+    + and limited to:
+        + contours more than 40% of the plate height
+        + more than 1% area, less than 20%
+        + more than 1.3 aspect ratio, less than 7
+    + HAS ALOT OF ISSUES WITH LOW RESOLUTION IMAGES
 
 + data splitting and training related (PLATE RECOGNITION)
     + There are 362 images, with one image having multiple variants with different noise
@@ -40,4 +48,7 @@
         + https://docs.ultralytics.com/modes/predict/#boxes
     + Thresholding
         + https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+    + morphology
+        + https://homepages.inf.ed.ac.uk/rbf/HIPR2/erode.htm
+        + https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
     
