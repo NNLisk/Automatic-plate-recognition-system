@@ -22,5 +22,9 @@
 ## FOR OCR
 
 + Tesseract PSM 7 or 8
-+ CRNN
-+ 
++ CRNN/CNN
++ MLP
++ CART decision tree
++ logistic and softmax regression
++ VGG, ResNet, mobileNet
++ PCA, HOG
