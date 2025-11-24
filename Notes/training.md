@@ -18,3 +18,9 @@
 
 + References
     + https://docs.ultralytics.com/modes/train/#idle-gpu-training
+
+## FOR OCR
+
++ Tesseract PSM 7 or 8
++ CRNN
++ 
