@@ -7,7 +7,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
-from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, thresholded_2_segmented_letters
+from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, thresholded_2_segmented_letters, segment_and_file_letters
 from src.utils.filer import make_new_session
 
 
@@ -26,8 +26,10 @@ def processImage(filename):
     cropped = get_cropped_plate(f"{sessionPath}/rawinput.jpg", sessionPath)
     thresheld = process_cropped(f"{sessionPath}/cropped.jpg", sessionPath)
     
-    thresholded_2_segmented_letters(f"{sessionPath}/thresholded.jpg", sessionPath)
+    contours = thresholded_2_segmented_letters(f"{sessionPath}/thresholded.jpg", sessionPath)
 
+    segment_and_file_letters(sessionPath, contours)
 
 if __name__ == "__main__":
-    processImage("test4.jpg")
+    
+    processImage("test5.jpg")

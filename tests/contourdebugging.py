@@ -9,7 +9,7 @@ sys.path.insert(0, project_root)
 from src.preprocessing.preprocessing import thresholded_2_segmented_letters
 
 def show_contours_debug():
-    session = "data/inference/sessions/4/"
+    session = "data/inference/sessions/6/"
     rects = thresholded_2_segmented_letters(
         f"{session}thresholded.jpg",session
     )
@@ -29,4 +29,5 @@ def show_contours_debug():
     cv2.waitKey(0)
     
 if __name__ == "__main__":
+    
     show_contours_debug()

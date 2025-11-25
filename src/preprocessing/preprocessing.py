@@ -70,14 +70,20 @@ def process_cropped(filename, sessionPath):
 
 
 def thresholded_2_segmented_letters(filename, sessionPath):
+    cropped = cv2.imread(f"{sessionPath}/cropped.jpg", cv2.IMREAD_GRAYSCALE)
     thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+
     plate_h, plate_w = thimg.shape
     kernel = np.ones((2,2), np.uint8)
+    
     cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
+    # DEPRECATED
     # eroded = cv2.erode(cleaned, kernel)
     # cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
-    cv2.imshow("t", cleaned)
-    cv2.waitKey(0)
+
+    # SHOWCLEANED
+    # cv2.imshow("t", cleaned)
+    # cv2.waitKey(0)
 
     cnts = cv2.findContours(cleaned, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
@@ -99,7 +105,7 @@ def thresholded_2_segmented_letters(filename, sessionPath):
         aspect = h / float(w)
 
         
-        if not (0.4 <= rel_h <= 0.9):
+        if not (0.35 <= rel_h <= 0.95):
             continue
 
         if not (0.01 <= rel_area <= 0.2):
@@ -109,7 +115,29 @@ def thresholded_2_segmented_letters(filename, sessionPath):
             continue
 
         character_contours.append((x,y,w,h))
+
+    croppedColor = cv2.cvtColor(cropped, cv2.COLOR_GRAY2BGR)
+
+    for i, (x, y, w, h) in enumerate(character_contours):
+        print(x,y, w, h)
+
+        cv2.rectangle(croppedColor, (x, y), (x+w, y+h), (0,255,0), 2)
+        cv2.putText(croppedColor, str(i), (x, y-5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+    scaled = cv2.resize(croppedColor, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
+    cv2.imwrite(f"{sessionPath}/contours.jpg", scaled)
     return character_contours
+
+def segment_and_file_letters(sessionPath, contours):
+    os.makedirs(f"{sessionPath}/characters", exist_ok=True)
+    cropped = cv2.imread(f"{sessionPath}/cropped.jpg")
+    
+    index = 1
+    for x, y, w, h in contours:
+        character = cropped[y:y + h, x:x + w]
+        cv2.imwrite(f"{sessionPath}/characters/{index}.jpg", character)
+        index += 1
+    
 
 # for just local tests
 # if __name__ == "__main__":
