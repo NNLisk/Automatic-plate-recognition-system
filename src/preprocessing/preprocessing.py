@@ -74,6 +74,7 @@ def thresholded_2_segmented_letters(filename, sessionPath):
     thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
     plate_h, plate_w = thimg.shape
+    print(thimg.shape)
     kernel = np.ones((2,2), np.uint8)
     
     cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
@@ -98,12 +99,13 @@ def thresholded_2_segmented_letters(filename, sessionPath):
     for c in cnts:
         area = cv2.contourArea(c)
         x, y, w, h = cv2.boundingRect(c)
-
+        
         rel_h = h / plate_h
         rel_w = w / plate_w
         rel_area = (w * h) / (plate_w * plate_h)
         aspect = h / float(w)
 
+        
         
         if not (0.35 <= rel_h <= 0.95):
             continue
@@ -116,9 +118,15 @@ def thresholded_2_segmented_letters(filename, sessionPath):
 
         character_contours.append((x,y,w,h))
 
+        height = max(character_contours, key=lambda r: r[3])[3]
+        for c in character_contours:
+            if c[3] < float(height) * 0.8:
+                character_contours.remove(c)
+
     croppedColor = cv2.cvtColor(cropped, cv2.COLOR_GRAY2BGR)
 
     for i, (x, y, w, h) in enumerate(character_contours):
+        
         print(x,y, w, h)
 
         cv2.rectangle(croppedColor, (x, y), (x+w, y+h), (0,255,0), 2)

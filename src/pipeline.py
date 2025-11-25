@@ -32,4 +32,4 @@ def processImage(filename):
 
 if __name__ == "__main__":
     
-    processImage("test5.jpg")
+    processImage("test6.jpg")

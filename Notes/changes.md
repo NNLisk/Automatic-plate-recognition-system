@@ -19,4 +19,6 @@
 + tried different thresholds for plates -> regular 127 seems to be the best without technical tests
 + Found the good morphology for the image segmentation
 
-
+## Niko - 25.11
++ Finished character segmentation
++ statistical filtering for segmentation, images filtered by relative height to each other also
