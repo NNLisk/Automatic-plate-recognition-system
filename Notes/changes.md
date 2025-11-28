@@ -27,3 +27,4 @@
 + trying out CCPD database for letter classification
 + made the base for the UI - currently with Streamlit tool
 + started building custom cnn with pytorch keras tools
++ data splitscript for tensorflow
