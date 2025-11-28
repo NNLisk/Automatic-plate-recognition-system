@@ -22,3 +22,7 @@
 ## Niko - 25.11
 + Finished character segmentation
 + statistical filtering for segmentation, images filtered by relative height to each other also
+
+## Niko -  28.11
++ trying out CCPD database for letter classification
++ made the base for the UI - currently with Streamlit tool

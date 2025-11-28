@@ -1,2 +1,4 @@
 data/plate_detector_training_data/train/*
 data/plate_detector_training_data/validate/*
+
+data/CCPD.zip
