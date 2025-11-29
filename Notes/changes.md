@@ -28,3 +28,7 @@
 + made the base for the UI - currently with Streamlit tool
 + started building custom cnn with pytorch keras tools
 + data splitscript for tensorflow
+
+## Niko - 29.11
++ designed, built and trained CNN for OCR
++ test script for OCR on real data -> 64% success rate

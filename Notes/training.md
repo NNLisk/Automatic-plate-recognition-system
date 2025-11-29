@@ -34,6 +34,8 @@
     + https://pyimagesearch.com/2021/11/15/tesseract-page-segmentation-modes-psms-explained-how-to-improve-your-ocr-accuracy/
     + https://www.geeksforgeeks.org/machine-learning/license-plate-recognition-with-opencv-and-tesseract-ocr/   
     + https://docs.pytorch.org/vision/main/models/vgg.html
+
+    
     
 
 ## OCR datasets
