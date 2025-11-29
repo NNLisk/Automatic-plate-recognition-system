@@ -1,0 +1,3 @@
+peak at 18 epochs, with 0.0008 loss and 100% accuracy
+a bit worse performance in real world conditions, might need to augment
+more for the next one

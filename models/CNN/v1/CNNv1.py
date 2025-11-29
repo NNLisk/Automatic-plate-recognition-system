@@ -24,7 +24,7 @@ sys.path.insert(0, project_root)
 batch = 64
 num_classes = 36
 learning_rate = 0.001
-num_epochs = 75
+num_epochs = 20
 channels = 1
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,41 +76,13 @@ class convolutional_neural_network(nn.Module):
 
         return x
 
-## SEPARATE VALIDATION FUNCTION
-def validate(model, val_loader, criterion, device):
-    model.eval()
-    val_loss = 0
-    correct = 0
-    total = 0
-
-    with torch.no_grad():
-        for character_data, target_values in val_loader:
-            character_data = character_data.to(device)
-            target_values = target_values.to(device)
-            
-            outputs = model(character_data)
-            loss = criterion(outputs, target_values)
-            val_loss += loss.item()
-
-            # for validation i just went with leaner metrics
-            # no F1 scores or anything
-            _, predicted = torch.max(outputs, 1)
-            total += target_values.size(0)
-            correct += (predicted == target_values).sum().item()
-        
-        avg_loss = val_loss / len(val_loader)
-        accuracy = 100 * correct / total
-        return avg_loss, accuracy
-
-
 
 def trainOCR():
 
     model = convolutional_neural_network().to(device=device)
+
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-
-    best_val_acc = 0
 
     for epoch in range(num_epochs):
         print(f"Epoch [{epoch + 1}/{num_epochs}]")
@@ -130,15 +102,9 @@ def trainOCR():
 
             epoch_loss += loss.item()
         
-        # ADDED VALIDATION AFTER EACH EPOCH
-        val_loss, val_acc = validate(model, val_loader, criterion, device)
-        print(f"Validation loss: {val_loss:.4f}, Validation accuracy: {val_acc:.2f}%")
-
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            torch.save(model.state_dict(), 'models/CNN/character_cnn_best.pth')
+       
             
-    torch.save(model.state_dict(), 'models/CNN/character_cnn_last.pth')
+    torch.save(model.state_dict(), 'models/CNN/character_cnn.pth')
     
 
 if __name__ == "__main__":

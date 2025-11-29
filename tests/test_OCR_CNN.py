@@ -11,7 +11,7 @@ sys.path.insert(0, project_root)
 from src.training.customCNN import convolutional_neural_network
 
 model = convolutional_neural_network()
-model.load_state_dict(torch.load('models/CNN/character_cnn.pth'))
+model.load_state_dict(torch.load('models/CNN/v2/character_cnn_best.pth'))
 model.eval()
 
 transform = transforms.Compose([
