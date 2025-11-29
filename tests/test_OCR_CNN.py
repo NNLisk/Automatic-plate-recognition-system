@@ -21,7 +21,7 @@ transform = transforms.Compose([
     transforms.Normalize((0.5,), (0.5,))
 ])
 
-img = Image.open('data/inference/sessions/2/characters/7.jpg')
+img = Image.open('data/inference/sessions/2/characters/2.jpg')
 img_tensor = transform(img).unsqueeze(0)
 
 with torch.no_grad():
