@@ -21,7 +21,17 @@
 
     + 64% success rate
 
++ v1: just training, no validation no augmentation
++ v2: added validation to save the best model and avoid overfitting
++ v3: test script to provide metrics and added data augmentation to overcome real world image imperfections. Meaningful improvements
+    + Still issues with the letters I, A, B
++ v4: trained for 100 epochs instead of 40 -> no meaningful improvement
 
++ IMPROVEMENT IDEAS:
+    + add another convolutional layer, or a fully connected layer
+    + more augmentation?
+
+    
 ## refs
 
 + CNN tutorials followed
