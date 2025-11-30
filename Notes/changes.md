@@ -32,3 +32,8 @@
 ## Niko - 29.11
 + designed, built and trained CNN for OCR
 + test script for OCR on real data -> 64% success rate
+
+## Niko - 30.11
++ OCR - CNN testing scripts that give performance metrics
++ Finished pipeline from rawimage to recognized plate (string to terminal)
++ Trained a new CNN with data augmentation. OCR improved to about 80% correctness for real data

@@ -36,11 +36,15 @@ def processImage(filename):
 
     segment_and_file_letters(sessionPath, contours)
 
+    plate = inferCharacter(sessionPath=sessionPath)
+
+    print(f"Recognized plate: {plate}")
+
     
 
 def inferCharacter(sessionPath):
     model = convolutional_neural_network()
-    model.load_state_dict(torch.load('models/CNN/v2/characters_cnn_best_pth'))
+    model.load_state_dict(torch.load('models/CNN/v4/character_cnn_best.pth'))
     model.eval()
 
     transform = transforms.Compose([
@@ -52,12 +56,24 @@ def inferCharacter(sessionPath):
 
     path = f"{sessionPath}/characters/"
 
-    characters = len([name for name in os.listdir(path=path) if os.path.isfile(name)])
+    characters = len([name for name in os.listdir(path=path) if os.path.isfile(os.path.join(path, name))])
+    print(characters)
+    
+    plate = ""
 
     for i in range(characters):
-        pass
+        img = Image.open(f'data/inference/sessions/6/characters/{i + 1}.jpg')
+        img_tensor = transform(img).unsqueeze(0)
 
+        with torch.no_grad():
+            output = model(img_tensor)
+            _, predicted = torch.max(output, 1)
+            predicted_class = predicted.item()
+        class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
+
+        plate += (class_names[predicted_class])
+    return plate
 
 if __name__ == "__main__":
     
-    processImage("test2.jpg")
+    processImage("test7.jpg")

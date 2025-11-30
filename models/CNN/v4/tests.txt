@@ -1,0 +1,11 @@
+PLATE: ITA 8135
+predicted: FTI 8195
+
+PLATE: IYB 6705
+predicted: IY8 6705
+
+PLATE: EA 0202 AA
+predicted: EA 0202 AA
+
+PLATE: YC24 BTF
+predicted: YC24 BTF

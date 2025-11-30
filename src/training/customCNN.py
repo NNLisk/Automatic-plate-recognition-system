@@ -24,7 +24,7 @@ sys.path.insert(0, project_root)
 batch = 64
 num_classes = 36
 learning_rate = 0.001
-num_epochs = 40
+num_epochs = 100
 channels = 1
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -80,7 +80,7 @@ class convolutional_neural_network(nn.Module):
         return x
 
 ## SEPARATE VALIDATION FUNCTION
-def validate(model, val_loader, criterion, device):
+def validate(model, criterion):
     model.eval()
     val_loss = 0
     correct = 0
@@ -134,7 +134,7 @@ def trainOCR():
             epoch_loss += loss.item()
         
         # ADDED VALIDATION AFTER EACH EPOCH
-        val_loss, val_acc = validate(model, val_loader, criterion, device)
+        val_loss, val_acc = validate(model, criterion)
         print(f"Validation loss: {val_loss:.4f}, Validation accuracy: {val_acc:.2f}%")
 
         if val_acc > best_val_acc:
@@ -143,9 +143,42 @@ def trainOCR():
             
     torch.save(model.state_dict(), 'models/CNN/character_cnn_last.pth')
     
+def testOCR(model):
+
+    model.eval()
+
+    f1 = F1Score(task='multiclass', num_classes=num_classes, average='macro').to(device)
+    accuracy = Accuracy(task='multiclass', num_classes=num_classes).to(device)
+    precision = Precision(task='multiclass', num_classes=num_classes, average='macro').to(device)
+    recall = Recall(task='multiclass', num_classes=num_classes, average='macro').to(device)
+
+    with torch.no_grad():
+        for data, targets in test_loader:
+            data = data.to(device)
+            targets = targets.to(device)
+
+            outputs = model(data)
+            _, predicted = torch.max(outputs, 1)
+
+            f1.update(predicted, targets)
+            accuracy.update(predicted, targets)
+            precision.update(predicted, targets)
+            recall.update(predicted, targets)
+    
+    print(f"F1 score: {f1.compute():.4f}")
+    print(f"accuracy: {accuracy.compute():.4f}")
+    print(f"precision: {precision.compute():.4f}")
+    print(f"recall: {recall.compute():.4f}")
+
+    return accuracy.compute(), f1.compute(), precision.compute(), recall.compute()
+    
 
 if __name__ == "__main__":
     trainOCR()
+
+    model = convolutional_neural_network().to(device)
+    model.load_state_dict(torch.load("models/CNN/v3/character_cnn_best.pth"))
+    testOCR(model)
 
 #== APPENDIX =================================
 
