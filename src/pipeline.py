@@ -13,7 +13,9 @@ sys.path.insert(0, project_root)
 from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, thresholded_2_segmented_letters, segment_and_file_letters
 from src.utils.filer import make_new_session
 from src.training.customCNN import convolutional_neural_network
+from src import config
 
+device = config.device
 
 
 
@@ -48,7 +50,7 @@ def processImage(filename):
 
 def inferCharacter(sessionPath):
     model = convolutional_neural_network()
-    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v4", "character_cnn_best.pth")))
+    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v4", "character_cnn_best.pth"), map_location=torch.device(device)))
     model.eval()
 
     transform = transforms.Compose([
