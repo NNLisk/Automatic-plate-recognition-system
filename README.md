@@ -77,6 +77,12 @@ data/inference/sessions/6
 ├── rawinput.jpg
 └── thresholded.jpg
 ```
+#### raw input
+![raw input](data/inference/sessions/6/rawinput.jpg)
+#### contours
+![contours](data/inference/sessions/6/contours.jpg)
+#### example crop
+![example crop](data/inference/sessions/6/characters/1.jpg)
 
 
 ## Collaborators
