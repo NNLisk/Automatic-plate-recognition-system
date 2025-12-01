@@ -21,18 +21,18 @@ def processImage(filename):
 
     # sessionpath includes the id, id just for reference
     sessionPath, sessionID = make_new_session()
-    inputFileName = f"data/inference/raw/{filename}"
+    inputFileName = os.path.join("data", "inference", "raw", filename)
     img = cv2.imread(inputFileName, cv2.IMREAD_COLOR)
 
     if img is None:
         raise Exception(f"Could not read image: {inputFileName}")
     # saves the raw image
-    cv2.imwrite(f"{sessionPath}/rawinput.jpg", img)
+    cv2.imwrite(os.path.join(sessionPath, "rawinput.jpg"), img)
 
-    cropped = get_cropped_plate(f"{sessionPath}/rawinput.jpg", sessionPath)
-    thresheld = process_cropped(f"{sessionPath}/cropped.jpg", sessionPath)
+    cropped = get_cropped_plate(os.path.join(sessionPath, "rawinput.jpg"), sessionPath)
+    thresheld = process_cropped(os.path.join(sessionPath, "cropped.jpg"), sessionPath)
     
-    contours = thresholded_2_segmented_letters(f"{sessionPath}/thresholded.jpg", sessionPath)
+    contours = thresholded_2_segmented_letters(os.path.join(sessionPath, "thresholded.jpg"), sessionPath)
 
     segment_and_file_letters(sessionPath, contours)
     print(sessionPath)
@@ -45,7 +45,7 @@ def processImage(filename):
 
 def inferCharacter(sessionPath):
     model = convolutional_neural_network()
-    model.load_state_dict(torch.load('models/CNN/v4/character_cnn_best.pth'))
+    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v4", "character_cnn_best.pth")))
     model.eval()
 
     transform = transforms.Compose([
@@ -55,7 +55,7 @@ def inferCharacter(sessionPath):
         transforms.Normalize((0.5,), (0.5,))
     ])
 
-    path = f"{sessionPath}/characters/"
+    path = os.path.join(sessionPath, "characters")
 
     characters = len([name for name in os.listdir(path=path) if os.path.isfile(os.path.join(path, name))])
     print(characters)
@@ -63,7 +63,7 @@ def inferCharacter(sessionPath):
     plate = ""
 
     for i in range(characters):
-        img = Image.open(f'{path}{i + 1}.jpg')
+        img = Image.open(os.path.join(path, f"{i+1}.jpg"))
         img_tensor = transform(img).unsqueeze(0)
 
         with torch.no_grad():

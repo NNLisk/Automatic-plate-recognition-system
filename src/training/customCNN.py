@@ -21,42 +21,50 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
+from src import config
+
 batch = 64
 num_classes = 36
 learning_rate = 0.001
 num_epochs = 100
 channels = 1
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+transform = None
+train_dataset, train_loader = None, None
+train_dataset, test_loader = None, None
+val_dataset, val_loader = None, None
 
-transform = transforms.Compose([
-    transforms.Resize((100,75)),
-    transforms.Grayscale(num_output_channels=1),
-    transforms.RandomRotation(5),
-    transforms.ColorJitter(0.3, 0.3),
-    transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))
-])
 
-train_dataset = datasets.ImageFolder(
-    root = 'data/OCR_training_data/data/train/',
-    transform = transform
-)
-train_loader = DataLoader(dataset=train_dataset, batch_size=batch, shuffle=True)
 
-test_dataset = datasets.ImageFolder(
-    root = 'data/OCR_training_data/data/test/',
-    transform = transform
-)
-test_loader = DataLoader(dataset=test_dataset, batch_size=batch, shuffle=False)
+def prepare_data():
 
-val_dataset = datasets.ImageFolder(
-    root = 'data/OCR_training_data/data/val/',
-    transform = transform
-)
-val_loader = DataLoader(dataset=val_dataset, batch_size=batch, shuffle=False)
+    transform = transforms.Compose([
+        transforms.Resize((100,75)),
+        transforms.Grayscale(num_output_channels=1),
+        transforms.RandomRotation(5),
+        transforms.ColorJitter(0.3, 0.3),
+        transforms.RandomAffine(degrees=0, translate=(0.1, 0.1)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+    ])
 
+    train_dataset = datasets.ImageFolder(
+        root = 'data/OCR_training_data/data/train/',
+        transform = transform
+    )
+    train_loader = DataLoader(dataset=train_dataset, batch_size=batch, shuffle=True)
+
+    test_dataset = datasets.ImageFolder(
+        root = 'data/OCR_training_data/data/test/',
+        transform = transform
+    )
+    test_loader = DataLoader(dataset=test_dataset, batch_size=batch, shuffle=False)
+
+    val_dataset = datasets.ImageFolder(
+        root = 'data/OCR_training_data/data/val/',
+        transform = transform
+    )
+    val_loader = DataLoader(dataset=val_dataset, batch_size=batch, shuffle=False)
 
 
 class convolutional_neural_network(nn.Module):
