@@ -76,5 +76,5 @@ def inferCharacter(sessionPath):
     return plate
 
 if __name__ == "__main__":
-    
+    #pipeline: rawimage filename -> session folder automatically with output in terminal
     processImage("test5.jpg")
