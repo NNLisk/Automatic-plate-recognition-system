@@ -74,7 +74,9 @@ def thresholded_2_segmented_letters(filename, sessionPath):
     thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
     plate_h, plate_w = thimg.shape[:2]
-    print(thimg.shape)
+    print("\n#########################\n")
+
+    print("Relative plate size: " + str(plate_h) + "x" + str(plate_w))
     kernel = np.ones((2,2), np.uint8)
     
     cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
@@ -124,16 +126,17 @@ def thresholded_2_segmented_letters(filename, sessionPath):
                 character_contours.remove(c)
 
     croppedColor = cv2.cvtColor(cropped, cv2.COLOR_GRAY2BGR)
-
+    print("Found characters in\n-----------------------\nx,y,w,h")
     for i, (x, y, w, h) in enumerate(character_contours):
         
-        print(x,y, w, h)
+        print(f"{str(x)},{str(y)},{str(w)},{str(h)}")
 
         cv2.rectangle(croppedColor, (x, y), (x+w, y+h), (0,255,0), 2)
         cv2.putText(croppedColor, str(i), (x, y-5),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
     scaled = cv2.resize(croppedColor, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
     cv2.imwrite(os.path.join(sessionPath, "contours.jpg"), scaled)
+    print("-----------------------")
     return character_contours
 
 def segment_and_file_letters(sessionPath, contours):

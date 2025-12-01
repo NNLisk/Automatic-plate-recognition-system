@@ -35,11 +35,14 @@ def processImage(filename):
     contours = thresholded_2_segmented_letters(os.path.join(sessionPath, "thresholded.jpg"), sessionPath)
 
     segment_and_file_letters(sessionPath, contours)
-    print(sessionPath)
+    print("Saved to a new session: " + sessionPath)
 
     plate = inferCharacter(sessionPath)
 
     print(f"Recognized plate: {plate}")
+
+    print("\n#########################\n")
+
 
     
 
@@ -58,7 +61,7 @@ def inferCharacter(sessionPath):
     path = os.path.join(sessionPath, "characters")
 
     characters = len([name for name in os.listdir(path=path) if os.path.isfile(os.path.join(path, name))])
-    print(characters)
+    print("Characters found: " + str(characters))
     
     plate = ""
 
