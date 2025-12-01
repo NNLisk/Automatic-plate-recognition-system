@@ -4,7 +4,7 @@ import os
 from ultralytics import YOLO
 from imutils import contours
 
-model = YOLO("models/plate_detector/weights/best.pt")
+model = YOLO(os.path.join("models", "plate_detector", "weights", "best.pt"))
 
 # preprocessing method ran on each picture coming from the UI
 
@@ -28,7 +28,7 @@ def get_cropped_plate(filename, sessionPath):
     
     normalized_for_cropping = cv2.normalize(for_cropping, None, 0, 255, cv2.NORM_MINMAX)
     
-    temporary_path = f"{sessionPath}/for_plate_detection.jpg"
+    temporary_path = os.path.join(sessionPath, "for_plate_detection.jpg")
     cv2.imwrite(temporary_path, for_plate_detection)
 
     results = model(temporary_path, conf=0.5)
@@ -44,7 +44,7 @@ def get_cropped_plate(filename, sessionPath):
     x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
     plate_crop = normalized_for_cropping[y1:y2, x1:x2]
 
-    cv2.imwrite(f"{sessionPath}/cropped.jpg", plate_crop)
+    cv2.imwrite(os.path.join(sessionPath, "cropped.jpg"), plate_crop)
 
     return plate_crop
 
@@ -60,7 +60,7 @@ def process_cropped(filename, sessionPath):
     # adaptive_thresholded_mean = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,11,2)
     # adaptive_thresholded_gaus = cv2.adaptiveThreshold(cropped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 
-    cv2.imwrite(f"{sessionPath}/thresholded.jpg", thresheld)
+    cv2.imwrite(os.path.join(sessionPath, "thresholded.jpg"), thresheld)
     # cv2.imwrite(f"{sessionPath}/thresholded75.jpg", thresheld2)
     # cv2.imwrite(f"{sessionPath}/thresholded0otsu.jpg", thresheld3)
     # cv2.imwrite(f"{sessionPath}/thresholded_adaptive_mean.jpg", adaptive_thresholded_mean)
@@ -70,10 +70,10 @@ def process_cropped(filename, sessionPath):
 
 
 def thresholded_2_segmented_letters(filename, sessionPath):
-    cropped = cv2.imread(f"{sessionPath}/cropped.jpg", cv2.IMREAD_GRAYSCALE)
+    cropped = cv2.imread(os.path.join(sessionPath, "cropped.jpg"), cv2.IMREAD_GRAYSCALE)
     thimg = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
 
-    plate_h, plate_w = thimg.shape
+    plate_h, plate_w = thimg.shape[:2]
     print(thimg.shape)
     kernel = np.ones((2,2), np.uint8)
     
@@ -133,17 +133,17 @@ def thresholded_2_segmented_letters(filename, sessionPath):
         cv2.putText(croppedColor, str(i), (x, y-5),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
     scaled = cv2.resize(croppedColor, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
-    cv2.imwrite(f"{sessionPath}/contours.jpg", scaled)
+    cv2.imwrite(os.path.join(sessionPath, "contours.jpg"), scaled)
     return character_contours
 
 def segment_and_file_letters(sessionPath, contours):
-    os.makedirs(f"{sessionPath}/characters", exist_ok=True)
-    cropped = cv2.imread(f"{sessionPath}/cropped.jpg")
+    os.makedirs(os.path.join(sessionPath, "characters"), exist_ok=True)
+    cropped = cv2.imread(os.path.join(sessionPath, "cropped.jpg"))
     
     index = 1
     for x, y, w, h in contours:
         character = cropped[y:y + h, x:x + w]
-        cv2.imwrite(f"{sessionPath}/characters/{index}.jpg", character)
+        cv2.imwrite(os.path.join(sessionPath, "characters", f"{index}.jpg"), character)
         index += 1
     
 

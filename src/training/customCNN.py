@@ -49,19 +49,19 @@ def prepare_data():
     ])
 
     train_dataset = datasets.ImageFolder(
-        root = 'data/OCR_training_data/data/train/',
+        root = os.path.join("data", "OCR_training_data", "data", "train"),
         transform = transform
     )
     train_loader = DataLoader(dataset=train_dataset, batch_size=batch, shuffle=True)
 
     test_dataset = datasets.ImageFolder(
-        root = 'data/OCR_training_data/data/test/',
+        root = os.path.join("data", "OCR_training_data", "data", "test"),
         transform = transform
     )
     test_loader = DataLoader(dataset=test_dataset, batch_size=batch, shuffle=False)
 
     val_dataset = datasets.ImageFolder(
-        root = 'data/OCR_training_data/data/val/',
+        root = os.path.join("data", "OCR_training_data", "data", "val"),
         transform = transform
     )
     val_loader = DataLoader(dataset=val_dataset, batch_size=batch, shuffle=False)
@@ -147,9 +147,9 @@ def trainOCR():
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), 'models/CNN/character_cnn_best.pth')
-            
-    torch.save(model.state_dict(), 'models/CNN/character_cnn_last.pth')
+            torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_best.pth"))
+
+    torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_last.pth"))     
     
 def testOCR(model):
 
@@ -185,7 +185,8 @@ if __name__ == "__main__":
     trainOCR()
 
     model = convolutional_neural_network().to(device)
-    model.load_state_dict(torch.load("models/CNN/v3/character_cnn_best.pth"))
+
+    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v3", "character_cnn_best.pth")))
     testOCR(model)
 
 #== APPENDIX =================================
