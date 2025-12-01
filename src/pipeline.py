@@ -35,8 +35,9 @@ def processImage(filename):
     contours = thresholded_2_segmented_letters(f"{sessionPath}/thresholded.jpg", sessionPath)
 
     segment_and_file_letters(sessionPath, contours)
+    print(sessionPath)
 
-    plate = inferCharacter(sessionPath=sessionPath)
+    plate = inferCharacter(sessionPath)
 
     print(f"Recognized plate: {plate}")
 
@@ -62,7 +63,7 @@ def inferCharacter(sessionPath):
     plate = ""
 
     for i in range(characters):
-        img = Image.open(f'data/inference/sessions/6/characters/{i + 1}.jpg')
+        img = Image.open(f'{path}{i + 1}.jpg')
         img_tensor = transform(img).unsqueeze(0)
 
         with torch.no_grad():
@@ -76,4 +77,4 @@ def inferCharacter(sessionPath):
 
 if __name__ == "__main__":
     
-    processImage("test7.jpg")
+    processImage("test5.jpg")
