@@ -60,8 +60,8 @@
 + data storing notation: what happens when an image is processed
     + new session is created with the next available id
     + looks like this
-    + ´´´
-    data/inference/sessions/6
+    + ```
+data/inference/sessions/6
 ├── characters
 │   ├── 1.jpg
 │   ├── 2.jpg
@@ -76,7 +76,7 @@
 ├── for_plate_detection.jpg
 ├── rawinput.jpg
 └── thresholded.jpg
-´´´
+```
 
 
 ## Collaborators
