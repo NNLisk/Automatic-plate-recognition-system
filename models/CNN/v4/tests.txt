@@ -9,3 +9,6 @@ predicted: EA 0202 AA
 
 PLATE: YC24 BTF
 predicted: YC24 BTF
+
+PLATE: EKY 687
+predicted: EKY 687
