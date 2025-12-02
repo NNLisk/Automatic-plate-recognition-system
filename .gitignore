@@ -2,3 +2,4 @@ data/plate_detector_training_data/train/*
 data/plate_detector_training_data/validate/*
 
 data/OCR_training_data/*
+data/inference/sessions/*
