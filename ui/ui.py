@@ -22,27 +22,31 @@ upload_file = st.file_uploader("Upload image", type=['jpg', 'jpeg'])
 model_choise = st.selectbox("Select OCR model", ['CNN classifier', 'other'])
 
 if upload_file is not None:
-    st.image(upload_file, caption="Uploaded image", use_column_width=True)
+    st.image(upload_file, caption="Uploaded image", width=400)
 
     if st.button("Recognize plate"):
         with st.spinner("Processing..."):
             sessionPath, sessionID = make_new_session()
-            with open(f"{sessionPath}/{sessionID}/rawinput", "wb") as rawimage:
+            with open(f"{sessionPath}/rawinput.jpg", "wb") as rawimage:
                 rawimage.write(upload_file.getbuffer())
             
+            result_data, plate = processImage(sessionPath, sessionID)
             ## call processimage from pipeline here
             ## parameters filepath and 
             ## returns plate
 
-            st.success(f"Detected plate: *RESULT*")
+            st.success(f"Detected plate: {plate}")
             col1, col2, col3, col4 = st.columns(4)
 
             with col1:
-                # display resulting image
-                pass
+                st.subheader("Cropped Image")
+                st.image(f"{sessionPath}/cropped.jpg")
             with col2:
-                pass
+                st.subheader("thresholded Image")
+                st.image(f"{sessionPath}/thresholded.jpg")
             with col3:
-                pass
+                st.subheader("Found characters")
+                st.image(f"{sessionPath}/contours.jpg")
             with col4:
-                pass
+                st.subheader("Example character")
+                st.image(f"{sessionPath}/characters/1.jpg")

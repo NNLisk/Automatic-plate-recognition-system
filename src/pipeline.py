@@ -19,31 +19,34 @@ device = config.device
 
 
 
-def processImage(filename):
+def processImage(sessionPath, sessionID):
 
     # sessionpath includes the id, id just for reference
-    sessionPath, sessionID = make_new_session()
-    inputFileName = os.path.join("data", "inference", "raw", filename)
-    img = cv2.imread(inputFileName, cv2.IMREAD_COLOR)
+    # sessionPath, sessionID = make_new_session()
+    # inputFileName = os.path.join("data", "inference", "raw", filename)
+    # img = cv2.imread(inputFileName, cv2.IMREAD_COLOR)
 
-    if img is None:
-        raise Exception(f"Could not read image: {inputFileName}")
-    # saves the raw image
-    cv2.imwrite(os.path.join(sessionPath, "rawinput.jpg"), img)
+    # if img is None:
+    #     raise Exception(f"Could not read image: {inputFileName}")
+    # # saves the raw image
+    # cv2.imwrite(os.path.join(sessionPath, "rawinput.jpg"), img)
+    result_data = "Saved to a new session: " + sessionPath
 
     cropped = get_cropped_plate(os.path.join(sessionPath, "rawinput.jpg"), sessionPath)
     thresheld = process_cropped(os.path.join(sessionPath, "cropped.jpg"), sessionPath)
     
-    contours = thresholded_2_segmented_letters(os.path.join(sessionPath, "thresholded.jpg"), sessionPath)
+    contours, rd = thresholded_2_segmented_letters(os.path.join(sessionPath, "thresholded.jpg"), sessionPath)
+    result_data += rd
 
     segment_and_file_letters(sessionPath, contours)
-    print("Saved to a new session: " + sessionPath)
 
-    plate = inferCharacter(sessionPath)
+    plate, rd2 = inferCharacter(sessionPath)
+    result_data += rd2
 
-    print(f"Recognized plate: {plate}")
 
-    print("\n#########################\n")
+    result_data += "\n#########################\n"
+
+    return result_data, plate
 
 
     
@@ -63,7 +66,7 @@ def inferCharacter(sessionPath):
     path = os.path.join(sessionPath, "characters")
 
     characters = len([name for name in os.listdir(path=path) if os.path.isfile(os.path.join(path, name))])
-    print("Characters found: " + str(characters))
+    result_data = "Characters found: " + str(characters)
     
     plate = ""
 
@@ -78,7 +81,7 @@ def inferCharacter(sessionPath):
         class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
 
         plate += (class_names[predicted_class])
-    return plate
+    return plate, result_data
 
 if __name__ == "__main__":
     #pipeline: rawimage filename -> session folder automatically with output in terminal
