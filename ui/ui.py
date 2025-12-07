@@ -30,13 +30,18 @@ if upload_file is not None:
             with open(f"{sessionPath}/rawinput.jpg", "wb") as rawimage:
                 rawimage.write(upload_file.getbuffer())
             
-            result_data, plate = processImage(sessionPath, sessionID)
+            result_data, plate, confidence_values = processImage(sessionPath, sessionID)
             ## call processimage from pipeline here
             ## parameters filepath and 
             ## returns plate
 
             st.success(f"Detected plate: {plate}")
-            col1, col2, col3, col4 = st.columns(4)
+            st.success(f"confidence for each character:  {', '.join([str(i) for i in confidence_values])}")
+        
+            col1, col2, col3 = st.columns(3)
+            container1 = st.container()
+            container2 = st.container(horizontal=True)
+
 
             with col1:
                 st.subheader("Cropped Image")
@@ -47,6 +52,12 @@ if upload_file is not None:
             with col3:
                 st.subheader("Found characters")
                 st.image(f"{sessionPath}/contours.jpg")
-            with col4:
-                st.subheader("Example character")
-                st.image(f"{sessionPath}/characters/1.jpg")
+            # with col4:
+            #     st.subheader("Example character")
+            #     st.image(f"{sessionPath}/characters/1.jpg")
+
+            with container1:            
+                st.subheader("Individual characters")
+                with container2:
+                    for name in sorted(os.listdir(os.path.join(f"{sessionPath}/characters"))):
+                        st.image(f"{sessionPath}/characters/{name}")
