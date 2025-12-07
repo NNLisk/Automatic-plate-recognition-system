@@ -15,6 +15,14 @@ sys.path.insert(0, project_root)
 from src.pipeline import processImage
 from src.utils.filer import make_new_session
 
+st.markdown("""
+    <style>
+        img {
+            border-radius: 0 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 
 st.title("ALPR")
 

@@ -3,14 +3,14 @@ import os
 import sys
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(project_root)
+os.chdir(project_root) 
 sys.path.insert(0, project_root)
 
 from src.preprocessing.preprocessing import thresholded_2_segmented_letters
 
 def show_contours_debug():
-    session = "data/inference/sessions/6/"
-    rects = thresholded_2_segmented_letters(
+    session = "data/inference/sessions/3/"
+    rects, _ = thresholded_2_segmented_letters(
         f"{session}thresholded.jpg",session
     )
 

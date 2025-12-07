@@ -77,12 +77,12 @@ def thresholded_2_segmented_letters(filename, sessionPath):
     result_data = "\n#########################\n"
 
     result_data += "\nRelative plate size: " + str(plate_h) + "x" + str(plate_w)
-    kernel = np.ones((2,2), np.uint8)
+    kernel = np.ones((3,3), np.uint8)
     
     cleaned = cv2.morphologyEx(thimg, cv2.MORPH_OPEN, kernel)
-    cleaned = cv2.erode(cleaned, kernel, iterations=1)
-    # cv2.imshow("m", cleaned)
-    # cv2.waitKey(0)
+    cleaned = cv2.erode(cleaned, np.ones((1,2), np.uint8), iterations=1)
+    cv2.imshow("m", cleaned)
+    cv2.waitKey(0)
     # DEPRECATED
     # eroded = cv2.erode(cleaned, kernel)
     # cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
@@ -91,7 +91,7 @@ def thresholded_2_segmented_letters(filename, sessionPath):
     # cv2.imshow("t", cleaned)
     # cv2.waitKey(0)
 
-    cnts = cv2.findContours(cleaned, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cv2.findContours(cleaned, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
     if not cnts:
@@ -146,7 +146,7 @@ def segment_and_file_letters(sessionPath, contours):
     
     index = 1
     for x, y, w, h in contours:
-        character = cropped[y-3:y + h, x-3:x + w]
+        character = cropped[y:y + h, x:x + w]
         cv2.imwrite(os.path.join(sessionPath, "characters", f"{index}.jpg"), character)
         index += 1
     
