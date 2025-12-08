@@ -23,17 +23,23 @@ sys.path.insert(0, project_root)
 
 from src import config
 
+device = config.device
+
 batch = 64
 num_classes = 36
 learning_rate = 0.001
-num_epochs = 100
+num_epochs = 70
 channels = 1
 
 transform = None
 train_dataset, train_loader = None, None
-train_dataset, test_loader = None, None
+test_dataset, test_loader = None, None
 val_dataset, val_loader = None, None
 
+train_accuracies = []
+train_losses = []
+val_accuracies = []
+val_losses = []
 
 
 def prepare_data():
@@ -47,6 +53,8 @@ def prepare_data():
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])
+
+    global train_dataset, train_loader, test_dataset, test_loader, val_dataset,val_loader
 
     train_dataset = datasets.ImageFolder(
         root = os.path.join("data", "OCR_training_data", "data", "train"),
@@ -74,13 +82,17 @@ class convolutional_neural_network(nn.Module):
         self.conv1 = nn.Conv2d(in_channels=channels, out_channels=8, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1)
-        self.fc1 = nn.Linear(16*25*18, num_classes)
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
+        ## with two pooling times, images are halved twice, 100x75 => 25x18
+        self.fc1 = nn.Linear(32*25*18, num_classes)
 
     def forward(self, x):
         x = f.relu(self.conv1(x))
         x = self.pool(x)
         x = f.relu(self.conv2(x))
         x = self.pool(x)
+        x = f.relu(self.conv3(x))
+        #x = self.pool(x)
         x = x.reshape(x.shape[0], -1)
         # print(x.shape) confirms the output has right amount of channels: 7200
         x = self.fc1(x)
@@ -93,6 +105,8 @@ def validate(model, criterion):
     val_loss = 0
     correct = 0
     total = 0
+
+    global val_accuracies, val_losses
 
     with torch.no_grad():
         for character_data, target_values in val_loader:
@@ -111,6 +125,9 @@ def validate(model, criterion):
         
         avg_loss = val_loss / len(val_loader)
         accuracy = 100 * correct / total
+
+        val_accuracies.append(accuracy)
+        val_losses.append(avg_loss)
         return avg_loss, accuracy
 
 
@@ -122,11 +139,16 @@ def trainOCR():
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     best_val_acc = 0
+    global train_accuracies, train_losses, val_accuracies, val_losses
+    total = 0
+    correct = 0
 
     for epoch in range(num_epochs):
         print(f"Epoch [{epoch + 1}/{num_epochs}]")
 
         epoch_loss = 0
+        train_accuracy = 0
+        
 
         for batch_index, (data, targets) in enumerate(tqdm(train_loader)):
             data = data.to(device)
@@ -134,12 +156,20 @@ def trainOCR():
 
             scores = model(data)
             loss = criterion(scores, targets)
-
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
             epoch_loss += loss.item()
+
+            _, predicted = torch.max(scores, 1)
+            total += targets.size(0)
+            correct += (predicted == targets).sum().item()
+
+        train_accuracy = 100 * (correct/total)
+        train_losses.append(epoch_loss)
+        train_accuracies.append(train_accuracy)
+
         
         # ADDED VALIDATION AFTER EACH EPOCH
         val_loss, val_acc = validate(model, criterion)
@@ -150,7 +180,12 @@ def trainOCR():
             torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_best.pth"))
 
     torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_last.pth"))     
-    
+    print(train_losses)
+    print(train_accuracies)
+    print(val_losses)
+    print(val_accuracies)
+
+
 def testOCR(model):
 
     model.eval()
@@ -182,12 +217,13 @@ def testOCR(model):
     
 
 if __name__ == "__main__":
+    prepare_data()
     trainOCR()
 
     model = convolutional_neural_network().to(device)
 
-    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v3", "character_cnn_best.pth")))
-    testOCR(model)
+    # model.load_state_dict(torch.load(os.path.join("models", "CNN", "v3", "character_cnn_best.pth")))
+    # testOCR(model)
 
 #== APPENDIX =================================
 

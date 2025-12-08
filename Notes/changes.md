@@ -24,7 +24,7 @@
 + statistical filtering for segmentation, images filtered by relative height to each other also
 
 ## Niko -  28.11
-+ trying out CCPD database for letter classification
++ trying out CCPD database for letter classification - didnt work out
 + made the base for the UI - currently with Streamlit tool
 + started building custom cnn with pytorch keras tools
 + data splitscript for tensorflow
@@ -37,3 +37,9 @@
 + OCR - CNN testing scripts that give performance metrics
 + Finished pipeline from rawimage to recognized plate (string to terminal)
 + Trained a new CNN with data augmentation. OCR improved to about 80% correctness for real data
+
+## Niko - 5-8.11
++ OCR v5 and refined morphology
++ base for SVM and RFC
++ Fully functional UI with connected pipeline
++ Report start
