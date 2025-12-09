@@ -27,7 +27,7 @@ st.markdown("""
 st.title("ALPR")
 
 upload_file = st.file_uploader("Upload image", type=['jpg', 'jpeg'])
-model_choise = st.selectbox("Select OCR model", ['CNN classifier', 'other'])
+model_choise = st.selectbox("Select OCR model", ['CNN classifier', 'KNN classifier'])
 
 if upload_file is not None:
     st.image(upload_file, caption="Uploaded image", width=400)
@@ -37,12 +37,14 @@ if upload_file is not None:
             sessionPath, sessionID = make_new_session()
             with open(f"{sessionPath}/rawinput.jpg", "wb") as rawimage:
                 rawimage.write(upload_file.getbuffer())
-            
-            result_data, plate, confidence_values = processImage(sessionPath, sessionID)
-            ## call processimage from pipeline here
-            ## parameters filepath and 
-            ## returns plate
 
+            if model_choise == "CNN classifier":
+                result_data, plate, confidence_values = processImage(sessionPath, sessionID, "CNN")
+            
+            if model_choise == "KNN classifier":
+                result_data, plate, confidence_values = processImage(sessionPath, sessionID, "KNN")
+            
+            
             st.success(f"Detected plate: {plate}")
             st.success(f"confidence for each character:  {', '.join([str(i) for i in confidence_values])}")
         

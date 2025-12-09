@@ -14,13 +14,14 @@ sys.path.insert(0, project_root)
 from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, thresholded_2_segmented_letters, segment_and_file_letters
 from src.utils.filer import make_new_session
 from src.training.customCNN import convolutional_neural_network
+from src.training.KNN import inferKNN
 from src import config
 
 device = config.device
 
 
 
-def processImage(sessionPath, sessionID):
+def processImage(sessionPath, sessionID, model):
 
     # sessionpath includes the id, id just for reference
     # sessionPath, sessionID = make_new_session()
@@ -41,18 +42,22 @@ def processImage(sessionPath, sessionID):
 
     segment_and_file_letters(sessionPath, contours)
 
-    plate, rd2, confidence_values = inferCharacter(sessionPath)
+    if model == "CNN":
+        plate, rd2, confidence_values = inferCharacterCNN(sessionPath)
+        
+    if model == "KNN":
+        plate, rd2, confidence_values = inferCharactersKNN(sessionPath)
+        
+
     result_data += rd2
-
-
     result_data += "\n#########################\n"
-
     return result_data, plate, confidence_values
+    
 
 
     
 
-def inferCharacter(sessionPath):
+def inferCharacterCNN(sessionPath):
     model = convolutional_neural_network()
     model.load_state_dict(torch.load(os.path.join("models", "CNN", "v5", "character_cnn_best.pth"), map_location=torch.device(device)))
     model.eval()
@@ -89,6 +94,19 @@ def inferCharacter(sessionPath):
         plate += (class_names[predicted_class])
     return plate, result_data, confidences
 
+def inferCharactersKNN(sessionPath):
+    plateindices = inferKNN(sessionPath)
+    class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
+
+    plate = ""
+
+    for i in plateindices:
+        plate += class_names[i]
+
+    return plate, "x", [0]
+    
+
 if __name__ == "__main__":
     #pipeline: rawimage filename -> session folder automatically with output in terminal
-    processImage("test_jesse.jpg")
+    spath, sid = make_new_session()
+    processImage(spath, sid)
