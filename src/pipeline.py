@@ -54,7 +54,7 @@ def processImage(sessionPath, sessionID):
 
 def inferCharacter(sessionPath):
     model = convolutional_neural_network()
-    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v4", "character_cnn_best.pth"), map_location=torch.device(device)))
+    model.load_state_dict(torch.load(os.path.join("models", "CNN", "v5", "character_cnn_best.pth"), map_location=torch.device(device)))
     model.eval()
 
     transform = transforms.Compose([
