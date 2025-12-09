@@ -43,3 +43,7 @@
 + base for SVM and RFC
 + Fully functional UI with connected pipeline
 + Report start
+
+## Niko - 7-9.12
++ Working k-nearest neighbor (KNN)
++ integrated with UI
