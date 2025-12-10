@@ -95,15 +95,15 @@ def inferCharacterCNN(sessionPath):
     return plate, result_data, confidences
 
 def inferCharactersKNN(sessionPath):
-    plateindices = inferKNN(sessionPath)
+    plateindices, confidences = inferKNN(sessionPath)
     class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
 
     plate = ""
-
+    
     for i in plateindices:
         plate += class_names[i]
 
-    return plate, "x", [0]
+    return plate, "x", confidences
     
 
 if __name__ == "__main__":

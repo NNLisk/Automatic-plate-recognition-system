@@ -113,6 +113,7 @@ def inferKNN(sessionPath):
     k = 100
 
     plateindices = []
+    confidences = [] 
 
     for i, image in enumerate(inferring):
         difference = image - xtrain
@@ -122,16 +123,22 @@ def inferKNN(sessionPath):
         nearest_labels = ytrain[nearest_indices]
 
         classes, amounts = np.unique(nearest_labels, return_counts=True)
+        print(classes)
+        print(amounts)
+        print("#############")
+        confidences.append(round(float(amounts[np.argmax(amounts)])/k, 2))
         predicted = classes[np.argmax(amounts)]
+
 
         plateindices.append(int(predicted))
 
-    return plateindices
+    return plateindices, confidences
 
 def euclidean_distance(x, y):
     distance = np.sqrt(np.sum(x-y)**2)
     return distance
 
 if __name__ == "__main__":
-    plt = inferKNN(os.path.join("data", "inference", "sessions", "1"))
+    plt, confidences = inferKNN(os.path.join("data", "inference", "sessions", "1"))
     print(plt)
+    print(confidences)
