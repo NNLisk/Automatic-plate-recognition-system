@@ -5,14 +5,17 @@
 # find plates button
 
 import streamlit as st
-import cv2
+with st.spinner("Loading opencv"):
+    import cv2
 import os, sys
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
-from src.pipeline import processImage
+with st.spinner("loading pipeline"):
+    from src.pipeline import processImage
+    
 from src.utils.filer import make_new_session
 
 st.markdown("""

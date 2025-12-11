@@ -3,3 +3,5 @@ data/plate_detector_training_data/validate/*
 
 data/OCR_training_data/*
 data/inference/sessions/*
+
+models/knn/knn_data.npz

@@ -8,7 +8,25 @@ project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
+from src.utils.filer import make_new_session
+
 dimension = (100, 75)
+
+def save_nps(path):
+    x, y = load_images(path)
+    xflat = process(x)
+    xtrain, xtest, ytrain, ytest = split(xflat,y)
+    fpath = os.path.join("models", "knn", "knn_data.npz")
+    np.savez_compressed(fpath, xtrain=xtrain, xtest=xtest, ytrain=ytrain, ytest=ytest)
+
+def load_nps(nppath):
+    data = np.load(nppath)
+    xtrain = data['xtrain']
+    xtest = data['xtest']
+    ytrain = data['ytrain']
+    ytest = data['ytest']
+    return xtrain, xtest, ytrain, ytest
+
 
 def load_images(containerPath):
     image_directory = containerPath
@@ -71,10 +89,10 @@ def split(x, y):
 
 ## the functions take the training images, loads and prepares them, flattens all images and splits into training and testing
 ## for this i thought just the training set is enough. it has more than 28000 images
-x, y = load_images(os.path.join("data", "OCR_training_data", "data", "train"))
-xflat = process(x)
+# x, y = load_images(os.path.join("data", "OCR_training_data", "data", "train"))
+# xflat = process(x)
 
-xtrain, xtest, ytrain, ytest = split(xflat,y)
+# xtrain, xtest, ytrain, ytest = split(xflat,y)
 
 # print(xtrain.shape)
 # print(xtest.shape)
@@ -108,8 +126,10 @@ def load_infer_chars(sessionPath):
 
 
 def inferKNN(sessionPath):
-    global xtrain, ytrain
+    # global xtrain, ytrain
     inferring = load_infer_chars(sessionPath)
+    xtrain, xtest, ytrain, ytest = load_nps(os.path.join("models", "knn", "knn_data.npz"))
+
     k = 100
 
     plateindices = []
@@ -139,6 +159,12 @@ def euclidean_distance(x, y):
     return distance
 
 if __name__ == "__main__":
-    plt, confidences = inferKNN(os.path.join("data", "inference", "sessions", "1"))
-    print(plt)
-    print(confidences)
+    # plt, confidences = inferKNN(os.path.join("data", "inference", "sessions", "1"))
+    # print(plt)
+    # print(confidences)
+
+    # save_nps(os.path.join("data", "OCR_training_data", "data", "train"))
+
+    sp, sid = make_new_session()
+    inferKNN(os.path.join(sp))
+    pass

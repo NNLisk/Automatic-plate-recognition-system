@@ -15,6 +15,8 @@ def preprocess_for_plate_finding(filename):
     normalized = cv2.normalize(img, None, 0, 255, cv2.NORM_MINMAX)
     blurred = cv2.GaussianBlur(normalized, (5,5), 0)
 
+    cv2.imshow("haha", blurred)
+    
     return blurred
 
 
@@ -152,11 +154,11 @@ def segment_and_file_letters(sessionPath, contours):
     
 
 # for just local tests
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #    os.chdir("/home/niko/Programming/school/AI/project")
 #    test_img = "data/inference/raw/test1.jpg"
 #    processed = getCroppedPlate(test_img)
-#
+    preprocess_for_plate_finding(os.path.join("data", "inference", "raw", "test_jesse.jpg"))
 #    if processed is not None and processed.size > 0:
 #        cv2.imwrite("data/inference/preprocessed/testPreprocessed.jpg", processed)
 #        print("Saved cropped plate")
