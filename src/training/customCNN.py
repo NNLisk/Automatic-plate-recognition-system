@@ -28,7 +28,7 @@ device = config.device
 batch = 64
 num_classes = 36
 learning_rate = 0.001
-num_epochs = 70
+num_epochs = 100
 channels = 1
 
 transform = None
@@ -124,7 +124,7 @@ def validate(model, criterion):
             correct += (predicted == target_values).sum().item()
         
         avg_loss = val_loss / len(val_loader)
-        accuracy = 100 * correct / total
+        accuracy = correct / total
 
         val_accuracies.append(accuracy)
         val_losses.append(avg_loss)
@@ -155,35 +155,76 @@ def trainOCR():
             targets = targets.to(device)
 
             scores = model(data)
+            # print("scores: ", scores)
             loss = criterion(scores, targets)
+            # print("loss: ", loss)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
             epoch_loss += loss.item()
+            # print("epoch loss: ", epoch_loss)
 
             _, predicted = torch.max(scores, 1)
+            # print("predicted: ", predicted)
             total += targets.size(0)
+            # print("total: ", total)
             correct += (predicted == targets).sum().item()
+            # print("correct: ", correct)
+        
+        avg_loss = epoch_loss / len(train_loader)
 
-        train_accuracy = 100 * (correct/total)
-        train_losses.append(epoch_loss)
+        train_accuracy = correct/total
+        train_losses.append(avg_loss)
         train_accuracies.append(train_accuracy)
 
         
         # ADDED VALIDATION AFTER EACH EPOCH
         val_loss, val_acc = validate(model, criterion)
-        print(f"Validation loss: {val_loss:.4f}, Validation accuracy: {val_acc:.2f}%")
+        print(f"Validation loss: {val_loss:.4f}, Validation accuracy: {val_acc:.2f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_best.pth"))
 
     torch.save(model.state_dict(), os.path.join("models", "CNN", "character_cnn_last.pth"))     
-    print(train_losses)
-    print(train_accuracies)
-    print(val_losses)
-    print(val_accuracies)
+    
+    
+    # print(train_losses)
+    # print(train_accuracies)
+    # print(val_losses)
+    # print(val_accuracies)
+    showmetrics(train_losses, train_accuracies, val_loss, val_accuracies)
+
+
+
+def showmetrics(train_losses, train_accuracies, val_loss, val_accuracies):
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+    plt.title("CNN training metrics by epoch")
+
+    axes[0, 0].plot(train_losses)
+    axes[0, 0].set_title('Training Loss')
+    axes[0, 0].set_xlabel('Epoch')
+    axes[0, 0].set_ylabel('Loss')
+
+    axes[0, 1].plot(train_accuracies)
+    axes[0, 1].set_title('Training Accuracy')
+    axes[0, 1].set_xlabel('Epoch')
+    axes[0, 1].set_ylabel('Accuracy')
+
+    axes[1, 0].plot(val_losses)
+    axes[1, 0].set_title('Validation Loss')
+    axes[1, 0].set_xlabel('Epoch')
+    axes[1, 0].set_ylabel('Loss')
+
+    axes[1, 1].plot(val_accuracies)
+    axes[1, 1].set_title('Validation Accuracy')
+    axes[1, 1].set_xlabel('Epoch')
+    axes[1, 1].set_ylabel('Accuracy')
+
+    plt.tight_layout()
+    plt.show()
 
 
 def testOCR(model):
