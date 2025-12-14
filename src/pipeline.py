@@ -11,6 +11,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(project_root)
 sys.path.insert(0, project_root)
 
+from src.training.Random_forest import infer_random_forest
 from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, thresholded_2_segmented_letters, segment_and_file_letters
 from src.utils.filer import make_new_session
 from src.training.customCNN import convolutional_neural_network
@@ -47,6 +48,10 @@ def processImage(sessionPath, sessionID, model):
         
     if model == "KNN":
         plate, rd2, confidence_values = inferCharactersKNN(sessionPath)
+
+    #random forest model switch
+    if model == "RFC":
+        plate, rd2, confidence_values = inferCharactersRF(sessionPath)
         
 
     result_data += rd2
@@ -94,6 +99,8 @@ def inferCharacterCNN(sessionPath):
         plate += (class_names[predicted_class])
     return plate, result_data, confidences
 
+
+
 def inferCharactersKNN(sessionPath):
     plateindices, confidences = inferKNN(sessionPath)
     class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
@@ -104,6 +111,10 @@ def inferCharactersKNN(sessionPath):
         plate += class_names[i]
 
     return plate, "x", confidences
+
+def inferCharactersRF(sessionPath):
+    _, plate, confidences = infer_random_forest(sessionPath)
+    return plate, "RandomForest OCR", confidences
     
 
 if __name__ == "__main__":

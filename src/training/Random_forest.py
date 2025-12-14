@@ -86,6 +86,8 @@ def _load_chars_for_inference(session_path):
     return np.array(imgs)
 
 def infer_random_forest(session_path, model_pth=model_path):
+
+    result_data = "kakka"
     # Load saved RF model, run inference on session characters, return plate and confidences.
     bundle = joblib.load(model_pth)
     rf, scaler, names = bundle["model"], bundle["scaler"], bundle["class_names"]
@@ -95,7 +97,7 @@ def infer_random_forest(session_path, model_pth=model_path):
     preds = probs.argmax(axis=1)
     confidences = probs.max(axis=1).round(3).tolist()
     plate = "".join(names[i] for i in preds)
-    return plate, confidences
+    return rd, plate, confidences
 
 if __name__ == "__main__":
     # Run training when executed directly

@@ -30,7 +30,7 @@ st.markdown("""
 st.title("ALPR")
 
 upload_file = st.file_uploader("Upload image", type=['jpg', 'jpeg'])
-model_choise = st.selectbox("Select OCR model", ['CNN classifier', 'KNN classifier'])
+model_choise = st.selectbox("Select OCR model", ['CNN classifier', 'KNN classifier', 'Random Forest Classifier'])
 
 if upload_file is not None:
     st.image(upload_file, caption="Uploaded image", width=400)
@@ -47,7 +47,8 @@ if upload_file is not None:
             if model_choise == "KNN classifier":
                 result_data, plate, confidence_values = processImage(sessionPath, sessionID, "KNN")
             
-            
+            if model_choise == "Random Forest Classifier":
+                result_data, plate, confidence_value = processImage(sessionPath, sessionID, "RFC")
             st.success(f"Detected plate: {plate}")
             st.success(f"confidence for each character:  {', '.join([str(i) for i in confidence_values])}")
         
