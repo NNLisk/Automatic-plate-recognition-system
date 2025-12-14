@@ -97,7 +97,7 @@ def infer_random_forest(session_path, model_pth=model_path):
     preds = probs.argmax(axis=1)
     confidences = probs.max(axis=1).round(3).tolist()
     plate = "".join(names[i] for i in preds)
-    return rd, plate, confidences
+    return result_data, plate, confidences
 
 if __name__ == "__main__":
     # Run training when executed directly

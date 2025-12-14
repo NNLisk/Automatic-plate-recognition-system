@@ -48,7 +48,7 @@ if upload_file is not None:
                 result_data, plate, confidence_values = processImage(sessionPath, sessionID, "KNN")
             
             if model_choise == "Random Forest Classifier":
-                result_data, plate, confidence_value = processImage(sessionPath, sessionID, "RFC")
+                result_data, plate, confidence_values = processImage(sessionPath, sessionID, "RFC")
             st.success(f"Detected plate: {plate}")
             st.success(f"confidence for each character:  {', '.join([str(i) for i in confidence_values])}")
         

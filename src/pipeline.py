@@ -113,8 +113,8 @@ def inferCharactersKNN(sessionPath):
     return plate, "x", confidences
 
 def inferCharactersRF(sessionPath):
-    _, plate, confidences = infer_random_forest(sessionPath)
-    return plate, "RandomForest OCR", confidences
+    rd, plate, confidences = infer_random_forest(sessionPath)
+    return plate, rd, confidences
     
 
 if __name__ == "__main__":
