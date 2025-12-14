@@ -16,13 +16,14 @@ dimension = (100, 75)  # resize target (w, h)
 class_names = ['0','1','2','3','4','5','6','7','8','9',
                'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                'P','Q','R','S','T','U','V','W','X','Y','Z']
-model_path = os.path.join("models", "random_forest", "rf_ocr.joblib")
+model_path = os.path.join("models", "RFC", "rf_ocr.joblib")
 
 def _load_images(root):
     # Load all class folders under root into arrays; labels are folder indices.
     folders = sorted([d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d))])
     imgs, labels = [], []
     for idx, d in enumerate(folders):
+        print("LOADING IMAGES")
         for fn in os.listdir(os.path.join(root, d)):
             fp = os.path.join(root, d, fn)
             img = cv2.imread(fp, cv2.IMREAD_GRAYSCALE)
@@ -36,6 +37,7 @@ def _load_images(root):
 
 def _extract_features(imgs):
     # Compute HOG features for each image; produces 1D feature vectors.
+    print("HOG")
     feats = []
     for img in imgs:
         feats.append(hog(img, orientations=9, pixels_per_cell=(8, 8),
@@ -59,6 +61,7 @@ def train_rf(data_root=os.path.join("data", "OCR_training_data", "data", "train"
         class_weight="balanced_subsample",
         random_state=42,
     )
+    
     rf.fit(Xtr, ytr)
     preds = rf.predict(Xte)
     print(f"Accuracy: {accuracy_score(yte, preds):.3f}")

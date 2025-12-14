@@ -5,3 +5,4 @@ data/OCR_training_data/*
 data/inference/sessions/*
 
 models/knn/knn_data.npz
+models/RFC/v1/rf_ocr.joblib
