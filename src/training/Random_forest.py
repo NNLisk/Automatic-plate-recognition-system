@@ -19,7 +19,7 @@ class_names = ['0','1','2','3','4','5','6','7','8','9',
 model_path = os.path.join("models", "random_forest", "rf_ocr.joblib")
 
 def _load_images(root):
-    #Load all class folders under root into arrays; labels are folder indices.
+    # Load all class folders under root into arrays; labels are folder indices.
     folders = sorted([d for d in os.listdir(root) if os.path.isdir(os.path.join(root, d))])
     imgs, labels = [], []
     for idx, d in enumerate(folders):
@@ -35,7 +35,7 @@ def _load_images(root):
     return np.array(imgs), np.array(labels)
 
 def _extract_features(imgs):
-    #Compute HOG features for each image; produces 1D feature vectors.
+    # Compute HOG features for each image; produces 1D feature vectors.
     feats = []
     for img in imgs:
         feats.append(hog(img, orientations=9, pixels_per_cell=(8, 8),
@@ -43,7 +43,7 @@ def _extract_features(imgs):
     return np.array(feats, dtype=np.float32)
 
 def train_rf(data_root=os.path.join("data", "OCR_training_data", "data", "train")):
-    #Train RandomForest on the OCR dataset, report metrics, and save model+scaler.
+    # Train RandomForest on the OCR dataset, report metrics, and save model+scaler.
     imgs, labels = _load_images(data_root)
     X = _extract_features(imgs)
     Xtr, Xte, ytr, yte = train_test_split(X, labels, test_size=0.1, stratify=labels, random_state=42)
@@ -69,7 +69,7 @@ def train_rf(data_root=os.path.join("data", "OCR_training_data", "data", "train"
     return rf
 
 def _load_chars_for_inference(session_path):
-    #Load segmented character images from a session folder.
+    # Load segmented character images from a session folder.
     chpath = os.path.join(session_path, "characters")
     files = sorted(f for f in os.listdir(chpath) if os.path.isfile(os.path.join(chpath, f)))
     imgs = []
