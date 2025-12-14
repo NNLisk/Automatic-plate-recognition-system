@@ -9,7 +9,7 @@ def get_new_session_id():
 
 def make_new_session():
     sessionID = get_new_session_id()
-    sessionPath = os.path.join("data", "inference", "sessions", sessionID)
+    sessionPath = os.path.join("data", "inference", "sessions", str(sessionID))
     os.makedirs(sessionPath, exist_ok=True)
     print(f"new session made with id {sessionID}")
     return sessionPath, sessionID
