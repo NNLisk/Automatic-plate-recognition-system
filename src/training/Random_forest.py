@@ -76,20 +76,50 @@ def _extract_features(imgs):
 def train_rf(data_root=os.path.join("data", "OCR_training_data", "data", "train")):
     # Train RandomForest on the OCR dataset, report metrics, and save model+scaler.
     imgs, labels = _load_images(data_root)
-    X = _extract_features(imgs)
-    Xtr, Xte, ytr, yte = train_test_split(X, labels, test_size=0.1, stratify=labels, random_state=42)
+
+    # Split before augmentation so only the training fold is augmented.
+    im_tr, im_te, ytr, yte = train_test_split(
+        imgs, labels, test_size=0.1, stratify=labels, random_state=42
+    )
+
+    # In-memory augmentation 
+    aug_imgs, aug_labels = [], []
+    for img, lbl in zip(im_tr, ytr):
+        aug = augment_char((img * 255).astype(np.uint8))
+        aug_imgs.append(aug.astype(np.float32) / 255.0)
+        aug_labels.append(lbl)
+    im_tr = np.concatenate([im_tr, np.array(aug_imgs, dtype=np.float32)])
+    ytr = np.concatenate([ytr, np.array(aug_labels)])
+
+    Xtr = _extract_features(im_tr)
+    Xte = _extract_features(im_te)
 
     scaler = StandardScaler()
     Xtr = scaler.fit_transform(Xtr)
     Xte = scaler.transform(Xte)
 
+    # v3
+    #rf = RandomForestClassifier(
+    #    n_estimators=500,
+    #    max_depth=None,
+    #    n_jobs=-1,
+    #    class_weight="balanced_subsample",
+    #    random_state=42,
+    #)
+    
+    # v4+
     rf = RandomForestClassifier(
-        n_estimators=500,
-        max_depth=None,
-        n_jobs=-1,
-        class_weight="balanced_subsample",
-        random_state=42,
-    )
+    n_estimators=200,          # start 100–300
+    max_depth=20,              # start 12–25
+    min_samples_leaf=3,        # start 2–10
+    min_samples_split=6,       # start 4–20
+    max_leaf_nodes=5000,
+    max_features="sqrt",
+    n_jobs=-1,
+    class_weight="balanced_subsample",
+    random_state=42,
+)
+
     
     rf.fit(Xtr, ytr)
     preds = rf.predict(Xte)
