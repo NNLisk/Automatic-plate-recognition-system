@@ -16,7 +16,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
 from torchmetrics import F1Score, Accuracy, Precision, Recall
-
+from torchmetrics.classification import MulticlassF1Score, MulticlassAccuracy, MulticlassPrecision, MulticlassRecall
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.chdir(project_root)
 sys.path.insert(0, project_root)
@@ -26,9 +26,9 @@ from src import config
 device = config.device
 
 batch = 64
-num_classes = 36
+num_classes = 35
 learning_rate = 0.001
-num_epochs = 100
+num_epochs = 70
 channels = 1
 
 transform = None
@@ -226,6 +226,51 @@ def showmetrics(train_losses, train_accuracies, val_loss, val_accuracies):
     plt.tight_layout()
     plt.show()
 
+def test_multiclass_ocr(model):
+    model.eval()
+    f1macro = MulticlassF1Score(num_classes=35, average="macro").to(device)
+    accuracymacro = MulticlassAccuracy(num_classes=35, average="macro").to(device)
+    precisionmacro = MulticlassPrecision(num_classes=35, average="macro").to(device)
+    recallmacro = MulticlassRecall(num_classes=35, average="macro").to(device)
+
+    f1 = MulticlassF1Score(num_classes=35, average=None).to(device)
+    accuracy = MulticlassAccuracy(num_classes=35, average=None).to(device)
+    precision = MulticlassPrecision(num_classes=35, average=None).to(device)
+    recall = MulticlassRecall(num_classes=35, average=None).to(device)
+
+    with torch.no_grad():
+        for data, targets in test_loader:
+            data = data.to(device)
+            targets = targets.to(device)
+
+            outputs = model(data)
+            _, predicted = torch.max(outputs, 1)
+
+            f1.update(predicted, targets)
+            accuracy.update(predicted, targets)
+            precision.update(predicted, targets)
+            recall.update(predicted, targets)
+
+            f1macro.update(predicted, targets)
+            accuracymacro.update(predicted, targets)
+            precisionmacro.update(predicted, targets)
+            recallmacro.update(predicted, targets)
+
+        figf1, axf1 = f1.plot()
+        figf1.savefig(os.path.join("models", "CNN", "f1_plot.jpg"))
+        figacc, axacc = accuracy.plot()
+        figacc.savefig(os.path.join("models", "CNN", "acc_plot.jpg"))
+        figpre, axpre = precision.plot()
+        figpre.savefig(os.path.join("models", "CNN", "pre_plot.jpg"))
+        figrec, axrec = recall.plot()
+        figrec.savefig(os.path.join("models", "CNN", "rec_plot.jpg"))
+
+
+
+        print(f"F1 score: {f1macro.compute():.4f}")
+        print(f"accuracy: {accuracymacro.compute():.4f}")
+        print(f"precision: {precisionmacro.compute():.4f}")
+        print(f"recall: {recallmacro.compute():.4f}")
 
 def testOCR(model):
 
@@ -263,8 +308,8 @@ if __name__ == "__main__":
 
     model = convolutional_neural_network().to(device)
 
-    # model.load_state_dict(torch.load(os.path.join("models", "CNN", "v3", "character_cnn_best.pth")))
-    # testOCR(model)
+    model.load_state_dict(torch.load(os.path.join("models", "CNN", "character_cnn_best.pth")))
+    test_multiclass_ocr(model)
 
 #== APPENDIX =================================
 

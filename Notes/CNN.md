@@ -26,6 +26,7 @@
 + v3: test script to provide metrics and added data augmentation to overcome real world image imperfections. Meaningful improvements
     + Still issues with the letters I, A, B
 + v4: trained for 100 epochs instead of 40 -> no meaningful improvement
++ v5: added another convolutional layer
 
 + IMPROVEMENT IDEAS:
     + add another convolutional layer, or a fully connected layer
@@ -38,3 +39,6 @@
     + https://www.digitalocean.com/community/tutorials/writing-cnns-from-scratch-in-pytorch
     + https://medium.com/latinxinai/convolutional-neural-network-from-scratch-6b1c856e1c07
     + https://www.datacamp.com/tutorial/pytorch-cnn-tutorial (main one)
+
++ torchmetrics
+    + https://www.evidentlyai.com/classification-metrics/multi-class-metrics

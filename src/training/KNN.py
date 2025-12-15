@@ -130,7 +130,7 @@ def inferKNN(sessionPath):
     inferring = load_infer_chars(sessionPath)
     xtrain, xtest, ytrain, ytest = load_nps(os.path.join("models", "knn", "knn_data.npz"))
 
-    k = 100
+    k = 20
 
     plateindices = []
     confidences = [] 
