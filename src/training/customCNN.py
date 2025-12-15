@@ -257,13 +257,28 @@ def test_multiclass_ocr(model):
             recallmacro.update(predicted, targets)
 
         figf1, axf1 = f1.plot()
-        figf1.savefig(os.path.join("models", "CNN", "f1_plot.jpg"))
+        axf1.set_ylim(0.95, 1.05)  
+        axf1.grid(axis='y', alpha=0.3)
+        axf1.legend().set_visible(False)
+        figf1.savefig(os.path.join("models", "CNN", "f1_plot.jpg"), dpi=400, bbox_inches="tight")
+
         figacc, axacc = accuracy.plot()
-        figacc.savefig(os.path.join("models", "CNN", "acc_plot.jpg"))
+        axacc.set_ylim(0.95, 1.05)  
+        axacc.grid(axis='y', alpha=0.3)
+        axacc.legend().set_visible(False)
+        figacc.savefig(os.path.join("models", "CNN", "acc_plot.jpg"), dpi=400, bbox_inches="tight")
+
         figpre, axpre = precision.plot()
-        figpre.savefig(os.path.join("models", "CNN", "pre_plot.jpg"))
+        axpre.set_ylim(0.95, 1.05)  
+        axpre.grid(axis='y', alpha=0.3)
+        axpre.legend().set_visible(False)
+        figpre.savefig(os.path.join("models", "CNN", "pre_plot.jpg"), dpi=400, bbox_inches="tight")
+
         figrec, axrec = recall.plot()
-        figrec.savefig(os.path.join("models", "CNN", "rec_plot.jpg"))
+        axrec.set_ylim(0.95, 1.05)  
+        axrec.grid(axis='y', alpha=0.3)
+        axrec.legend().set_visible(False)
+        figrec.savefig(os.path.join("models", "CNN", "rec_plot.jpg"), dpi=400, bbox_inches="tight")
 
 
 
@@ -304,7 +319,7 @@ def testOCR(model):
 
 if __name__ == "__main__":
     prepare_data()
-    trainOCR()
+    # trainOCR()
 
     model = convolutional_neural_network().to(device)
 
