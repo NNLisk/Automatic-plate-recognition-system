@@ -1,5 +1,6 @@
 import os, sys, cv2, joblib
 import numpy as np
+import random
 from skimage.feature import hog
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -34,6 +35,34 @@ def _load_images(root):
             imgs.append(img)
             labels.append(idx)
     return np.array(imgs), np.array(labels)
+
+def augment_char(img):
+    # Character augmentations to improve generalization.
+    h, w = img.shape[:2]
+
+    # small rotations
+    angle = random.uniform(-6, 6)
+    M = cv2.getRotationMatrix2D((w/2, h/2), angle, 1.0)
+    img = cv2.warpAffine(img, M, (w, h), borderMode=cv2.BORDER_CONSTANT, borderValue=255)
+
+    # slight translation
+    tx, ty = random.randint(-2, 2), random.randint(-2, 2)
+    M = np.float32([[1, 0, tx], [0, 1, ty]])
+    img = cv2.warpAffine(img, M, (w, h), borderMode=cv2.BORDER_CONSTANT, borderValue=255)
+
+    # brightness/contrast jitter (keep in 0–255)
+    alpha = random.uniform(0.8, 1.2)  # contrast
+    beta = random.randint(-20, 20)    # brightness
+    img = np.clip(alpha * img + beta, 0, 255).astype(np.uint8)
+
+    # slight Gaussian blur or noise (randomly chosen)
+    if random.random() < 0.3:
+        img = cv2.GaussianBlur(img, (3, 3), 0)
+    if random.random() < 0.4:
+        noise = np.random.normal(0, 10, img.shape)
+        img = np.clip(img + noise, 0, 255).astype(np.uint8)
+
+    return img
 
 def _extract_features(imgs):
     # Compute HOG features for each image; produces 1D feature vectors.
