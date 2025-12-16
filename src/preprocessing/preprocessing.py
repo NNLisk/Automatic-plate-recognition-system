@@ -119,7 +119,10 @@ def thresholded_2_segmented_letters(filename, sessionPath):
         if not (1.3 <= aspect <= 7.0):
             continue
 
-        character_contours.append((x,y,w,h))
+        if (0.04 > rel_w):
+            character_contours.append((x-5, y, w+10, h))
+        else:
+            character_contours.append((x,y,w,h))
 
         height = max(character_contours, key=lambda r: r[3])[3]
         for c in character_contours:
@@ -132,9 +135,9 @@ def thresholded_2_segmented_letters(filename, sessionPath):
         
         result_data += f"\n{str(x)},{str(y)},{str(w)},{str(h)}"
 
-        cv2.rectangle(croppedColor, (x, y), (x+w, y+h), (0,255,0), 2)
-        cv2.putText(croppedColor, str(i), (x, y-5),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,0,255), 2)
+        cv2.rectangle(croppedColor, (x-3, y-5), (x+w, y+h), (0,255,0), 1)
+        cv2.putText(croppedColor, str(i+1), (x+3, y-5),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0,0,255), 1)
     scaled = cv2.resize(croppedColor, None, fx=3, fy=3, interpolation=cv2.INTER_NEAREST)
     cv2.imwrite(os.path.join(sessionPath, "contours.jpg"), scaled)
     result_data += "\n-----------------------"
@@ -146,7 +149,7 @@ def segment_and_file_letters(sessionPath, contours):
     
     index = 1
     for x, y, w, h in contours:
-        character = cropped[y-3:y + h, x-3:x + w]
+        character = cropped[y-5:y + h, x-3:x + w]
         cv2.imwrite(os.path.join(sessionPath, "characters", f"{index}.jpg"), character)
         index += 1
     

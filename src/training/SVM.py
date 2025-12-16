@@ -106,7 +106,7 @@ def infer_svm(session_path, model_pth=model_path):
     confidences = probs.max(axis=1).round(3).tolist()
     plate = "".join(names[i] for i in preds)
 
-    return result_data, plate, confidences
+    return plate, result_data, confidences
 
 #Manual test run
 if __name__ == "__main__":
