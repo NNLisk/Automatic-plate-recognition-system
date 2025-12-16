@@ -8,7 +8,7 @@
 
 # How it works
 + Each character image is resized and flattened into a feature vector.
-+ SVM learns decision boundaries between character classes during training, so inference is fast (unlike KNN, which compares to all training images each time).
++ SVM learns decision boundaries between character classes during training, so inference is fast (unlike for example KNN, which compares to all training images each time).
 
 # Pro and con
 + Pro: works well in high-dimensional data, good generalization with margin idea.

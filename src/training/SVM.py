@@ -5,6 +5,11 @@ from math import floor
 import pickle
 from sklearn.svm import SVC
 
+# Additional imports for training metrices
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score
+
+
 
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.chdir(project_root)
@@ -15,7 +20,7 @@ filepath = os.path.join("data", "inference", "sessions")
 dimension = (100, 75)
 
 class_names = ['0','1','2','3','4','5','6','7','8','9',
-               'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
+               'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                'P','Q','R','S','T','U','V','W','X','Y','Z']
 
 model_path = os.path.join("models", "SVM", "v1", "svm_ocr.pkl")
@@ -46,22 +51,35 @@ def flatten_images(imgs):
     return flattened
 
 
-#Trains an SVM model for OCR and saves it to disk
+#Trains an SVM model for OCR and saves it
+#Also shows training metrics
+#Need to still tweak C and maybe kernel parameters for better accuracy
 def train_svm(data_root=os.path.join("data", "OCR_training_data", "data", "train")):
     imgs, labels = load_images(data_root)
     X = flatten_images(imgs)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X, labels, test_size=0.2, random_state=42, stratify=labels
+    )
     print("Training SVM...")
     svm = SVC(kernel="linear", C=1.0, probability=True)
-    svm.fit(X, labels)
+    svm.fit(X_train, y_train)
+    preds = svm.predict(X_val)
+    print("Training metrics:")
+    print(classification_report(
+        y_val, preds,
+        labels=np.arange(len(class_names)),
+        target_names=class_names,
+        digits=3,
+        zero_division=0
+    ))
+    print(f"Accuracy: {accuracy_score(y_val, preds):.4f}")
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    payload = {
-        "model": svm,
-        "class_names": class_names,
-        "dimension": dimension
-    }
+    payload = {"model": svm, "class_names": class_names, "dimension": dimension}
     with open(model_path, "wb") as f:
         pickle.dump(payload, f)
     print(f"SVM model saved to {model_path}")
+
+
 
 #Loads session character images for inference
 def _load_chars_for_inference(session_path):
