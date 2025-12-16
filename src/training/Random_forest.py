@@ -61,7 +61,6 @@ def augment_char(img):
     if random.random() < 0.4:
         noise = np.random.normal(0, 10, img.shape)
         img = np.clip(img + noise, 0, 255).astype(np.uint8)
-
     return img
 
 def _extract_features(imgs):

@@ -16,6 +16,7 @@ from src.preprocessing.preprocessing import get_cropped_plate, process_cropped, 
 from src.utils.filer import make_new_session
 from src.training.customCNN import convolutional_neural_network
 from src.training.KNN import inferKNN
+from src.training.SVM import infer_svm
 from src import config
 
 device = config.device
@@ -52,10 +53,18 @@ def processImage(sessionPath, sessionID, model):
     #random forest model switch
     if model == "RFC":
         plate, rd2, confidence_values = inferCharactersRF(sessionPath)
+
+    if model == "SVM":
+        plate, rd2, confidence_values = inferCharactersSVM(sessionPath)
         
 
     result_data += rd2
     result_data += "\n#########################\n"
+    print(result_data)
+
+    with open(os.path.join(sessionPath, "plate.txt"), "w") as f:
+        f.write(plate)
+        
     return result_data, plate, confidence_values
     
 
@@ -97,6 +106,7 @@ def inferCharacterCNN(sessionPath):
         class_names = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z']
 
         plate += (class_names[predicted_class])
+        
     return plate, result_data, confidences
 
 
@@ -114,6 +124,10 @@ def inferCharactersKNN(sessionPath):
 
 def inferCharactersRF(sessionPath):
     rd, plate, confidences = infer_random_forest(sessionPath)
+    return plate, rd, confidences
+
+def inferCharactersSVM(sessionPath):
+    plate, rd, confidences = infer_svm(sessionPath)
     return plate, rd, confidences
     
 
