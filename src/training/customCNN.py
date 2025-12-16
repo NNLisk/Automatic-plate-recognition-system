@@ -319,7 +319,7 @@ def testOCR(model):
 
 if __name__ == "__main__":
     prepare_data()
-    # trainOCR()
+    trainOCR()
 
     model = convolutional_neural_network().to(device)
 
