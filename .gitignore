@@ -6,6 +6,7 @@ data/inference/sessions/*
 
 models/knn/knn_data.npz
 models/RFC/*
+models/SVM/v1/svm_ocr.pkl
 
 src/*/__pycache__
 src/__pycache__
