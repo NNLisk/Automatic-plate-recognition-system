@@ -1,0 +1,82 @@
+LOADING IMAGES: 0
+LOADING IMAGES: 1
+LOADING IMAGES: 2
+LOADING IMAGES: 3
+LOADING IMAGES: 4
+LOADING IMAGES: 5
+LOADING IMAGES: 6
+LOADING IMAGES: 7
+LOADING IMAGES: 8
+LOADING IMAGES: 9
+LOADING IMAGES: A
+LOADING IMAGES: B
+LOADING IMAGES: C
+LOADING IMAGES: D
+LOADING IMAGES: E
+LOADING IMAGES: F
+LOADING IMAGES: G
+LOADING IMAGES: H
+LOADING IMAGES: I
+LOADING IMAGES: J
+LOADING IMAGES: K
+LOADING IMAGES: L
+LOADING IMAGES: M
+LOADING IMAGES: N
+LOADING IMAGES: P
+LOADING IMAGES: Q
+LOADING IMAGES: R
+LOADING IMAGES: S
+LOADING IMAGES: T
+LOADING IMAGES: U
+LOADING IMAGES: V
+LOADING IMAGES: W
+LOADING IMAGES: X
+LOADING IMAGES: Y
+LOADING IMAGES: Z
+Training SVM...
+Training metrics:
+              precision    recall  f1-score   support
+
+           0      0.995     1.000     0.998       206
+           1      0.981     0.995     0.988       206
+           2      1.000     1.000     1.000       206
+           3      1.000     0.985     0.993       206
+           4      1.000     1.000     1.000       206
+           5      1.000     1.000     1.000       206
+           6      0.995     0.995     0.995       206
+           7      1.000     0.990     0.995       206
+           8      0.990     0.990     0.990       206
+           9      1.000     1.000     1.000       206
+           A      1.000     1.000     1.000       202
+           B      1.000     0.990     0.995       206
+           C      1.000     1.000     1.000       204
+           D      1.000     1.000     1.000       202
+           E      1.000     1.000     1.000       202
+           F      1.000     1.000     1.000       204
+           G      1.000     1.000     1.000       204
+           H      0.995     1.000     0.998       204
+           I      0.990     0.985     0.988       202
+           J      0.995     1.000     0.998       206
+           K      1.000     1.000     1.000       202
+           L      1.000     1.000     1.000       202
+           M      1.000     1.000     1.000       204
+           N      1.000     1.000     1.000       204
+           O      0.000     0.000     0.000         0
+           P      1.000     1.000     1.000       202
+           Q      1.000     1.000     1.000       202
+           R      1.000     1.000     1.000       204
+           S      0.995     1.000     0.998       204
+           T      0.990     0.995     0.993       204
+           U      1.000     0.995     0.998       202
+           V      1.000     0.995     0.998       206
+           W      1.000     1.000     1.000       202
+           X      1.000     1.000     1.000       202
+           Y      0.990     1.000     0.995       202
+           Z      1.000     1.000     1.000       162
+
+    accuracy                          0.998      7100
+   macro avg      0.970     0.970     0.970      7100
+weighted avg      0.998     0.998     0.998      7100
+
+Accuracy: 0.9976
+SVM model saved to models\SVM\v1\svm_ocr.pkl
