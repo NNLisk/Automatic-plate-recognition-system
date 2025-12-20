@@ -4,12 +4,12 @@
 
 + Open virual envirovment
     - Windows:
-    - python -m venv venv
-    - venv\Scripts\activate
+        - python -m venv venv
+        - venv\Scripts\activate
 
-+ Mac/Linux:
-    - python3 -m venv venv
-    - source venv/bin/activate
+    - Mac/Linux:
+        - python3 -m venv venv
+        - source venv/bin/activate
 
 
 + Be inside the project folder and write into the teminal:
