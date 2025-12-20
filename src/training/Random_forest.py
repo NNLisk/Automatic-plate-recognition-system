@@ -17,7 +17,7 @@ dimension = (100, 75)  # resize target (w, h)
 class_names = ['0','1','2','3','4','5','6','7','8','9',
                'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                'P','Q','R','S','T','U','V','W','X','Y','Z']
-model_path = os.path.join("models", "RFC", "v4", "rf_ocr.joblib")
+model_path = os.path.join("models", "RFC", "v5", "rf_ocr.joblib")
 
 def _load_images(root):
     # Load all class folders under root into arrays; labels are folder indices.
@@ -107,12 +107,24 @@ def train_rf(data_root=os.path.join("data", "OCR_training_data", "data", "train"
     #)
     
     # v4+
+    # rf = RandomForestClassifier(
+    # n_estimators=200,          # start 100–300
+    # max_depth=20,              # start 12–25
+    # min_samples_leaf=3,        # start 2–10
+    # min_samples_split=6,       # start 4–20
+    # max_leaf_nodes=5000,
+    # max_features="sqrt",
+    # n_jobs=-1,
+    # class_weight="balanced_subsample",
+     #random_state=42,
+# )
+    # v5 tweaks to hyperparameters
     rf = RandomForestClassifier(
-    n_estimators=200,          # start 100–300
-    max_depth=20,              # start 12–25
-    min_samples_leaf=3,        # start 2–10
-    min_samples_split=6,       # start 4–20
-    max_leaf_nodes=5000,
+    n_estimators=300,         
+    max_depth=25,              
+    min_samples_leaf=2,        
+    min_samples_split=4,      
+    max_leaf_nodes=None,
     max_features="sqrt",
     n_jobs=-1,
     class_weight="balanced_subsample",
