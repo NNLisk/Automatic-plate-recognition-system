@@ -11,3 +11,7 @@ accuracy: overall correct predictions / total samples (0.997 on 2840 test charac
 macro avg: average of precision/recall/F1 across classes, unweighted (treats each class equally).
 weighted avg: average weighted by support (accounts for class frequency).
 
+# Why doesn't it work the best in real life situations
+Although the RFC achieved high accuracy during validation (ass seen in the metrics), its performance drops when used on real license plates. This is due to the fact that HOG is sensitive to image rotation and noise, which can limit its robustness in situatuions like real licence plate testing. HOG assumes consistent edge contrast, stable lighting, and minimal distortions but thats not the case in real world. Small variations cause large changes in the HOG profile, leading to misclassification.
+
++ https://www.sciencedirect.com/topics/computer-science/histogram-of-oriented-gradient
