@@ -2,7 +2,7 @@
 
 ## How to run the project
 
-+ Open virual envirovment
++ Open virtual environment in terminal
     - Windows:
         - python -m venv venv
         - venv\Scripts\activate
@@ -12,11 +12,11 @@
         - source venv/bin/activate
 
 
-+ Be inside the project folder and write into the teminal:
++ Be inside the project folder and write into the terminal:
     - pip install -r requirements.txt
     - python -m streamlit run ui/ui.py
 
-+ Ui will open in browser and you can test our models with the pictures in our project or your own.
++ UI will open in browser and you can test our models with the pictures in our project or your own.
 
 
 ## Project overview
