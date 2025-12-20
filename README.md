@@ -1,22 +1,22 @@
 # Foundations of Artificial Intelligence
 
-## How to run the project
++ How to run the project
 
-# Open virual envirovment
++ Open virual envirovment
 Windows:
-- python -m venv venv
-- venv\Scripts\activate
+python -m venv venv
+venv\Scripts\activate
 
 Mac/Linux:
-- python3 -m venv venv
-- source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 
 
-# Be inside the project folder and write into the teminal:
-- pip install -r requirements.txt
-- python -m streamlit run ui/ui.py
++ Be inside the project folder and write into the teminal:
+pip install -r requirements.txt
+python -m streamlit run ui/ui.py
 
-# Ui will open in browser and you can test our models with the pictures in our project or your own
+Ui will open in browser and you can test our models with the pictures in our project or your own.
 
 
 ## Project overview
