@@ -22,11 +22,11 @@
 ## Project overview
 
 #### raw input
-![raw input](data/inference/sessions/6/rawinput.jpg)
+![raw input](magicfolder/12/rawinput.jpg)
 #### contours
-![contours](data/inference/sessions/6/contours.jpg)
+![contours](magicfolder/12/contours.jpg)
 #### example crop
-![example crop](data/inference/sessions/6/characters/1.jpg)
+![example crop](magicfolder/12/characters/1.jpg)
 
 
 ## Collaborators
